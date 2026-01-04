@@ -25,10 +25,10 @@
         <!-- Thông Tin hiện/ẩn -->
         <div id="status-info" class="info-box hidden">
             <h3>ℹ️ Thông Tin & Update</h3>
-            <p><strong>Phiên bản:</strong> Hoàn Hảo Cuối Cùng (04/01/2026)</p>
+            <p><strong>Phiên bản:</strong> Hoàn Hảo Với Nút Restart/Skip/Từ Bỏ/Reset (04/01/2026)</p>
             <p><strong>Tác giả:</strong> Nguyễn Chí Dự 🇻🇳 (OWNER)</p>
             <p><strong>Gmail hỗ trợ:</strong> Herogoodboymc2024@gmail.com</p>
-            <p>Giờ mọi thứ chạy mượt mà 100%, không lỗi nữa nha! ❤️</p>
+            <p>Thêm nút Restart, Skip (tốn 30đ), Từ Bỏ (tốn 10đ), Reset điểm - có xác nhận hết!</p>
         </div>
 
         <!-- Màn hình Start -->
@@ -46,6 +46,14 @@
             <p id="question"></p>
             <button id="speak-btn">🔊 Nghe Phát Âm</button>
             <div id="options"></div>
+
+            <div class="quiz-controls">
+                <button id="skip-btn">⏭️ Skip (-30đ)</button>
+                <button id="restart-btn">🔄 Chơi Lại</button>
+                <button id="reset-score-btn">🗑️ Reset Điểm</button>
+                <button id="quit-btn">✖️ Từ Bỏ (-10đ)</button>
+            </div>
+
             <div id="result"></div>
             <p id="score">Điểm: 0</p>
         </div>
@@ -192,19 +200,17 @@
 
         function updateScore() {
             const elements = document.querySelectorAll('#score, #current-score, #shop-score');
-            elements.forEach(el => {
-                if (el) el.textContent = score;
-            });
+            elements.forEach(el => el.textContent = score);
         }
 
         // Bắt Đầu Học
         document.getElementById('start-btn').addEventListener('click', () => {
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('quiz-screen').classList.remove('hidden');
-            currentQuestion = 0;
-            score = 0;
-            updateScore();
-            loadQuestion();
+            if (confirm('Bạn đã sẵn sàng học chưa? 💪')) {
+                document.getElementById('start-screen').classList.add('hidden');
+                document.getElementById('quiz-screen').classList.remove('hidden');
+                currentQuestion = 0;
+                loadQuestion();
+            }
         });
 
         // Load câu hỏi
@@ -242,6 +248,48 @@
             currentQuestion++;
             setTimeout(loadQuestion, 2000);
         }
+
+        // Skip (tốn 30 điểm)
+        document.getElementById('skip-btn').addEventListener('click', () => {
+            if (score >= 30) {
+                if (confirm('Skip câu này tốn 30 điểm, bạn đồng ý chứ?')) {
+                    score -= 30;
+                    updateScore();
+                    currentQuestion++;
+                    loadQuestion();
+                }
+            } else {
+                alert('Không đủ điểm để skip nha!');
+            }
+        });
+
+        // Từ Bỏ (tốn 10 điểm)
+        document.getElementById('quit-btn').addEventListener('click', () => {
+            if (confirm('Bạn đồng ý trừ 10 điểm để từ bỏ chứ?')) {
+                score -= 10;
+                updateScore();
+                document.getElementById('quiz-screen').classList.add('hidden');
+                document.getElementById('start-screen').classList.remove('hidden');
+            }
+        });
+
+        // Chơi Lại (xóa điểm)
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            if (confirm('Bạn có muốn chơi lại? Điểm của bạn sẽ bị xóa đấy!')) {
+                score = 0;
+                currentQuestion = 0;
+                updateScore();
+                loadQuestion();
+            }
+        });
+
+        // Reset Điểm
+        document.getElementById('reset-score-btn').addEventListener('click', () => {
+            if (confirm('Bạn chắc muốn reset điểm về 0 chứ?')) {
+                score = 0;
+                updateScore();
+            }
+        });
 
         // TTS
         document.getElementById('speak-btn').addEventListener('click', () => {
@@ -311,10 +359,10 @@
                         updateScore();
                         currentTimezone = timezones[country] || timezones.vn;
                         updateClock();
-                        alert('Mua thành công! Đã áp dụng nền và đồng hồ mới 🎉');
+                        alert('Mua thành công! Đã áp dụng!');
                     }
                 } else {
-                    alert('Không đủ điểm nha! Chơi thêm đi 💪');
+                    alert('Không đủ điểm nha!');
                 }
             });
         });
