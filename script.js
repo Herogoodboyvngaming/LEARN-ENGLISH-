@@ -1,10 +1,11 @@
-// Dữ liệu câu hỏi theo độ khó và ngôn ngữ
+// Dữ liệu câu hỏi
 const data = {
     vi: {
         easy: [
             { q: "Xin chào trong tiếng Anh là gì?", options: ["Goodbye", "Hello", "Thank you", "Sorry"], a: 1 },
             { q: "Táo tiếng Anh là?", options: ["Orange", "Banana", "Apple", "Mango"], a: 2 },
-            { q: "Cảm ơn là gì?", options: ["Hello", "Goodbye", "Thank you", "Please"], a: 2 }
+            { q: "Cảm ơn là gì?", options: ["Hello", "Goodbye", "Thank you", "Please"], a: 2 },
+            { q: "Nước trong tiếng Anh là gì?", options: ["Milk", "Water", "Coffee", "Tea"], a: 1 }
         ],
         normal: [
             { q: "Từ 'Beautiful' nghĩa là?", options: ["Xấu xí", "Đẹp", "Buồn", "Vui"], a: 1 },
@@ -31,7 +32,6 @@ const data = {
         normal: [
             { q: "What does 'Beautiful' mean in Vietnamese?", options: ["Ugly", "Đẹp", "Sad", "Happy"], a: 1 }
         ],
-        // Có thể thêm nhiều hơn...
         hard: [], superhard: [], extreme: []
     }
 };
@@ -52,9 +52,11 @@ const elements = {
     nextBtn: document.getElementById('next-btn'),
     speakBtn: document.getElementById('speak-btn'),
     modeBtn: document.getElementById('mode-btn'),
-    welcomeTitle: document.getElementById('welcome-title')
+    welcomeTitle: document.getElementById('welcome-title'),
+    reportBtn: document.getElementById('report-btn')
 };
 
+// Cập nhật text theo ngôn ngữ
 function updateTexts() {
     document.querySelector('header h1').textContent = currentLang === 'vi' 
         ? '🇻🇳 Học Tiếng Anh Cùng Chí Dự 🇻🇳' 
@@ -64,7 +66,12 @@ function updateTexts() {
         : 'Welcome to the language learning quiz!';
 }
 
-// Chọn ngôn ngữ
+// Nút Report Bug (sửa link sau khi tạo repo nhé!)
+elements.reportBtn.onclick = () => {
+    window.open('https://github.com/herogoodboyvngaming/hoc-tieng-anh-chidu/issues', '_blank');
+};
+
+// Ngôn ngữ
 document.getElementById('lang-btn').onclick = () => {
     document.getElementById('lang-modal').classList.remove('hidden');
 };
@@ -73,28 +80,24 @@ document.querySelectorAll('[data-lang]').forEach(btn => {
     btn.onclick = () => {
         const newLang = btn.dataset.lang;
         if (newLang !== currentLang) {
-            if (confirm(currentLang === 'vi' 
-                ? 'Bạn có chắc muốn đổi ngôn ngữ?' 
-                : 'Are you sure you want to change language?')) {
+            if (confirm(currentLang === 'vi' ? 'Bạn có chắc muốn đổi ngôn ngữ?' : 'Are you sure you want to change language?')) {
                 currentLang = newLang;
                 updateTexts();
                 loadQuestions();
                 document.getElementById('lang-modal').classList.add('hidden');
             }
+        } else {
+            document.getElementById('lang-modal').classList.add('hidden');
         }
     };
 });
 
-document.getElementById('close-lang').onclick = () => {
-    document.getElementById('lang-modal').classList.add('hidden');
-};
-
-// Chọn mode
+// Mode
 document.getElementById('mode-btn').onclick = () => {
     const modes = ['easy', 'normal', 'hard', 'superhard', 'extreme'];
     const names = { easy: 'Dễ', normal: 'Bình Thường', hard: 'Khó', superhard: 'Super Hard', extreme: 'Extreme Mode' };
     const idx = modes.indexOf(currentMode);
-    const next = modes[(idx + 1) % modes.length];
+    let next = modes[(idx + 1) % modes.length];
 
     if (next === 'extreme') {
         if (!confirm('⚠️ EXTREME MODE ⚠️\nChế độ này chỉ dành cho thánh tiếng Anh!\nBạn có dám thử không? 😈')) {
@@ -111,9 +114,17 @@ document.getElementById('mode-btn').onclick = () => {
 document.getElementById('info-btn').onclick = () => {
     document.getElementById('info-modal').classList.remove('hidden');
 };
-document.getElementById('close-info').onclick = () => {
-    document.getElementById('info-modal').classList.add('hidden');
-};
+
+// Đóng modal
+document.getElementById('close-lang').onclick = () => document.getElementById('lang-modal').classList.add('hidden');
+document.getElementById('close-info').onclick = () => document.getElementById('info-modal').classList.add('hidden');
+
+// Đóng khi click nền đen (cực pro)
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.onclick = (e) => {
+        if (e.target === modal) modal.classList.add('hidden');
+    };
+});
 
 // Bắt đầu
 document.getElementById('start-btn').onclick = () => {
@@ -154,7 +165,6 @@ function loadQuestion() {
 function checkAnswer(selected) {
     const q = currentQuestions[currentQuestion];
     const buttons = document.querySelectorAll('.option-btn');
-
     buttons.forEach((btn, i) => {
         btn.disabled = true;
         if (i === q.a) btn.style.background = '#00b894';
@@ -169,7 +179,6 @@ function checkAnswer(selected) {
             ? `Sai rồi! Đáp án: ${q.options[q.a]}` 
             : `Wrong! Correct: ${q.options[q.a]}`;
     }
-
     updateScore();
     elements.nextBtn.disabled = false;
 }
@@ -192,16 +201,18 @@ elements.nextBtn.onclick = () => {
     }
 };
 
-// Phát âm bằng Google TTS
+// Phát âm
 elements.speakBtn.onclick = () => {
-    const text = currentQuestions[currentQuestion].q;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = currentLang === 'vi' ? 'vi-VN' : 'en-US';
-    utterance.rate = 0.9;
-    speechSynthesis.speak(utterance);
+    const text = currentQuestions[currentQuestion]?.q || '';
+    if (text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = currentLang === 'vi' ? 'vi-VN' : 'en-US';
+        utterance.rate = 0.9;
+        speechSynthesis.speak(utterance);
+    }
 };
 
-// Các nút điều khiển
+// Nút điều khiển quiz
 document.getElementById('restart-btn').onclick = () => { currentQuestion = 0; loadQuestion(); };
 document.getElementById('reset-score-btn').onclick = () => { score = 0; updateScore(); };
 document.getElementById('quit-btn').onclick = () => {
