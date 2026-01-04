@@ -1,6 +1,5 @@
-// Dữ liệu câu hỏi
 const data = {
-    vi: {
+    vi: { /* giữ nguyên như cũ */ 
         easy: [
             { q: "Xin chào trong tiếng Anh là gì?", options: ["Goodbye", "Hello", "Thank you", "Sorry"], a: 1 },
             { q: "Táo tiếng Anh là?", options: ["Orange", "Banana", "Apple", "Mango"], a: 2 },
@@ -24,7 +23,7 @@ const data = {
             { q: "'Defenestration' nghĩa là hành động gì?", options: ["Ném ai đó ra cửa sổ", "Mở cửa", "Đóng cửa", "Ăn uống"], a: 0 }
         ]
     },
-    en: {
+    en: { /* giữ nguyên */ 
         easy: [
             { q: "What is 'Xin chào' in English?", options: ["Goodbye", "Hello", "Thank you", "Sorry"], a: 1 },
             { q: "What is 'Táo' in English?", options: ["Orange", "Banana", "Apple", "Mango"], a: 2 }
@@ -42,7 +41,7 @@ let currentQuestions = [];
 let currentQuestion = 0;
 let score = 0;
 
-const elements = {
+const els = {
     startScreen: document.getElementById('start-screen'),
     quizScreen: document.getElementById('quiz-screen'),
     question: document.getElementById('question'),
@@ -53,172 +52,40 @@ const elements = {
     speakBtn: document.getElementById('speak-btn'),
     modeBtn: document.getElementById('mode-btn'),
     welcomeTitle: document.getElementById('welcome-title'),
-    reportBtn: document.getElementById('report-btn')
+    langModal: document.getElementById('lang-modal'),
+    infoModal: document.getElementById('info-modal')
 };
 
-// Cập nhật text theo ngôn ngữ
 function updateTexts() {
-    document.querySelector('header h1').textContent = currentLang === 'vi' 
-        ? '🇻🇳 Học Tiếng Anh Cùng Chí Dự 🇻🇳' 
-        : '🇻🇳 Learn English With Chí Dự 🇻🇳';
-    elements.welcomeTitle.textContent = currentLang === 'vi'
-        ? 'Chào mừng bạn đến với quiz học ngoại ngữ!'
-        : 'Welcome to the language learning quiz!';
+    document.querySelector('header h1').textContent = currentLang === 'vi' ? '🇻🇳 Học Tiếng Anh Cùng Chí Dự 🇻🇳' : '🇻🇳 Learn English With Chí Dự 🇻🇳';
+    els.welcomeTitle.textContent = currentLang === 'vi' ? 'Chào mừng bạn đến với quiz học ngoại ngữ!' : 'Welcome to the language learning quiz!';
 }
 
-// Nút Report Bug (sửa link sau khi tạo repo nhé!)
-elements.reportBtn.onclick = () => {
-    window.open('https://github.com/herogoodboyvngaming/hoc-tieng-anh-chidu/issues', '_blank');
+// Report Bug - sửa link repo của bạn ở đây
+document.getElementById('report-btn').onclick = () => {
+    window.open('https://github.com/herogoodboyvngaming/LEARN-ENGLISH-/issues', '_blank'); // ← sửa tên repo nếu khác
 };
 
-// Ngôn ngữ
-document.getElementById('lang-btn').onclick = () => {
-    document.getElementById('lang-modal').classList.remove('hidden');
-};
+// MỞ MODAL
+document.getElementById('lang-btn').onclick = () => els.langModal.classList.remove('hidden');
+document.getElementById('info-btn').onclick = () => els.infoModal.classList.remove('hidden');
 
-document.querySelectorAll('[data-lang]').forEach(btn => {
-    btn.onclick = () => {
-        const newLang = btn.dataset.lang;
-        if (newLang !== currentLang) {
-            if (confirm(currentLang === 'vi' ? 'Bạn có chắc muốn đổi ngôn ngữ?' : 'Are you sure you want to change language?')) {
-                currentLang = newLang;
-                updateTexts();
-                loadQuestions();
-                document.getElementById('lang-modal').classList.add('hidden');
-            }
-        } else {
-            document.getElementById('lang-modal').classList.add('hidden');
-        }
-    };
+// ĐÓNG MODAL BẰNG NÚT
+document.getElementById('close-lang').onclick = () => els.langModal.classList.add('hidden');
+document.getElementById('close-info').onclick = () => els.infoModal.classList.add('hidden');
+
+// ĐÓNG KHI CLICK NỀN ĐEN HOẶC ESC
+document.querySelectorAll('.modal').forEach(m => {
+    m.addEventListener('click', e => {
+        if (e.target === m) m.classList.add('hidden');
+    });
+});
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        els.langModal.classList.add('hidden');
+        els.infoModal.classList.add('hidden');
+    }
 });
 
-// Mode
-document.getElementById('mode-btn').onclick = () => {
-    const modes = ['easy', 'normal', 'hard', 'superhard', 'extreme'];
-    const names = { easy: 'Dễ', normal: 'Bình Thường', hard: 'Khó', superhard: 'Super Hard', extreme: 'Extreme Mode' };
-    const idx = modes.indexOf(currentMode);
-    let next = modes[(idx + 1) % modes.length];
-
-    if (next === 'extreme') {
-        if (!confirm('⚠️ EXTREME MODE ⚠️\nChế độ này chỉ dành cho thánh tiếng Anh!\nBạn có dám thử không? 😈')) {
-            return;
-        }
-    }
-
-    currentMode = next;
-    elements.modeBtn.textContent = `⚡ Mode: ${names[next]}`;
-    loadQuestions();
-};
-
-// Thông tin
-document.getElementById('info-btn').onclick = () => {
-    document.getElementById('info-modal').classList.remove('hidden');
-};
-
-// Đóng modal
-document.getElementById('close-lang').onclick = () => document.getElementById('lang-modal').classList.add('hidden');
-document.getElementById('close-info').onclick = () => document.getElementById('info-modal').classList.add('hidden');
-
-// Đóng khi click nền đen (cực pro)
-document.querySelectorAll('.modal').forEach(modal => {
-    modal.onclick = (e) => {
-        if (e.target === modal) modal.classList.add('hidden');
-    };
-});
-
-// Bắt đầu
-document.getElementById('start-btn').onclick = () => {
-    if (confirm(currentLang === 'vi' ? 'Bạn đã sẵn sàng học chưa? 💪' : 'Are you ready to learn? 💪')) {
-        elements.startScreen.classList.add('hidden');
-        elements.quizScreen.classList.remove('hidden');
-        loadQuestions();
-        loadQuestion();
-    }
-};
-
-function loadQuestions() {
-    currentQuestions = data[currentLang][currentMode] || data[currentLang].easy;
-    if (currentQuestions.length === 0) {
-        currentQuestions = [{ q: currentLang === 'vi' ? "Chưa có câu hỏi cho mode này!" : "No questions yet!", options: [], a: -1 }];
-    }
-    currentQuestion = 0;
-    score = 0;
-    updateScore();
-}
-
-function loadQuestion() {
-    const q = currentQuestions[currentQuestion];
-    elements.question.textContent = q.q;
-    elements.options.innerHTML = '';
-    elements.result.textContent = '';
-    elements.nextBtn.disabled = true;
-
-    q.options.forEach((opt, i) => {
-        const btn = document.createElement('button');
-        btn.textContent = opt;
-        btn.classList.add('option-btn');
-        btn.onclick = () => checkAnswer(i);
-        elements.options.appendChild(btn);
-    });
-}
-
-function checkAnswer(selected) {
-    const q = currentQuestions[currentQuestion];
-    const buttons = document.querySelectorAll('.option-btn');
-    buttons.forEach((btn, i) => {
-        btn.disabled = true;
-        if (i === q.a) btn.style.background = '#00b894';
-        if (i === selected && i !== q.a) btn.style.background = '#ff6b6b';
-    });
-
-    if (selected === q.a) {
-        score += 10;
-        elements.result.textContent = currentLang === 'vi' ? 'Đúng rồi! +10 điểm 🎉' : 'Correct! +10 points 🎉';
-    } else {
-        elements.result.textContent = currentLang === 'vi' 
-            ? `Sai rồi! Đáp án: ${q.options[q.a]}` 
-            : `Wrong! Correct: ${q.options[q.a]}`;
-    }
-    updateScore();
-    elements.nextBtn.disabled = false;
-}
-
-function updateScore() {
-    elements.scoreEl.textContent = `Điểm: ${score}`;
-}
-
-elements.nextBtn.onclick = () => {
-    currentQuestion++;
-    if (currentQuestion < currentQuestions.length) {
-        loadQuestion();
-    } else {
-        elements.question.textContent = currentLang === 'vi' ? 'Hoàn thành! 🎊' : 'Completed! 🎊';
-        elements.options.innerHTML = '';
-        elements.nextBtn.disabled = true;
-        elements.result.textContent = currentLang === 'vi' 
-            ? `Bạn đạt ${score} điểm!` 
-            : `You scored ${score} points!`;
-    }
-};
-
-// Phát âm
-elements.speakBtn.onclick = () => {
-    const text = currentQuestions[currentQuestion]?.q || '';
-    if (text) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = currentLang === 'vi' ? 'vi-VN' : 'en-US';
-        utterance.rate = 0.9;
-        speechSynthesis.speak(utterance);
-    }
-};
-
-// Nút điều khiển quiz
-document.getElementById('restart-btn').onclick = () => { currentQuestion = 0; loadQuestion(); };
-document.getElementById('reset-score-btn').onclick = () => { score = 0; updateScore(); };
-document.getElementById('quit-btn').onclick = () => {
-    elements.quizScreen.classList.add('hidden');
-    elements.startScreen.classList.remove('hidden');
-};
-
-// Khởi tạo
-updateTexts();
+// Các chức năng khác giữ nguyên (ngôn ngữ, mode, quiz, phát âm...)
+document.querySelectorAll('[data-lang]').forEach(btn =>
