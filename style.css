@@ -14,16 +14,9 @@ body {
     box-shadow: 0 20px 50px rgba(0,0,0,0.15);
     text-align: center;
 }
-h1 {
-    font-size: 3em;
-    color: #e74c3c;
-    margin-bottom: 10px;
-}
-.subtitle {
-    color: #c0392b;
-    font-style: italic;
-    margin-bottom: 30px;
-}
+h1 { font-size: 2.8em; color: #e74c3c; margin-bottom: 10px; }
+.clock { font-size: 1.5em; color: #2c3e50; font-weight: bold; margin: 10px 0; }
+.subtitle { color: #c0392b; font-style: italic; margin-bottom: 30px; }
 .controls button {
     padding: 15px 30px;
     margin: 10px;
@@ -32,22 +25,14 @@ h1 {
     font-size: 1.2em;
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    background: #3498db;
+    color: white;
 }
-#lang-btn { background: #3498db; color: white; }
-#mode-btn { background: #e67e22; color: white; }
-#status-btn { background: #9b59b6; color: white; }
-#report-btn { background: #e74c3c; color: white; }
 .welcome-box {
-    background: #f8f9fa;
     padding: 60px;
+    background: #f8f9fa;
     border-radius: 30px;
     margin: 40px 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-.welcome-box h2 {
-    font-size: 2.5em;
-    color: #2c3e50;
-    margin-bottom: 20px;
 }
 .big-btn {
     background: linear-gradient(to right, #ff6b6b, #feca57);
@@ -55,19 +40,9 @@ h1 {
     font-size: 2em;
     padding: 25px 70px;
     border-radius: 50px;
-    box-shadow: 0 10px 30px rgba(255,107,107,0.4);
 }
-#question {
-    font-size: 2em;
-    margin: 40px 0;
-    color: #2c3e50;
-}
-#speak-btn {
-    background: #8e44ad;
-    color: white;
-    padding: 12px 25px;
-    margin-bottom: 20px;
-}
+#question { font-size: 2em; margin: 40px 0; color: #2c3e50; }
+#speak-btn { background: #8e44ad; color: white; padding: 15px 30px; margin-bottom: 20px; border-radius: 50px; }
 .option-btn {
     display: block;
     width: 90%;
@@ -78,65 +53,39 @@ h1 {
     border: 3px solid #bdc3c7;
     border-radius: 25px;
     cursor: pointer;
-    transition: 0.3s;
 }
-.option-btn:hover {
-    background: #74b9ff;
-    color: white;
-    transform: scale(1.05);
-}
-.quiz-controls button {
-    padding: 12px 25px;
-    margin: 10px;
-    background: #95a5a6;
-    color: white;
-    border-radius: 50px;
-}
-#result {
-    font-size: 2em;
-    font-weight: bold;
-    margin: 40px 0;
-    min-height: 60px;
-}
-#score {
-    font-size: 2em;
-    color: #27ae60;
-}
-.info-box {
-    background: #f8f9fa;
-    border: 3px solid #9b59b6;
-    border-radius: 25px;
-    padding: 30px;
-    margin: 40px 0;
-    text-align: left;
-}
-.modal {
+#result { font-size: 2em; margin: 40px 0; min-height: 60px; font-weight: bold; }
+#score { font-size: 2em; color: #27ae60; }
+.info-box { background: #f8f9fa; border: 3px solid #9b59b6; border-radius: 25px; padding: 30px; margin: 40px 0; text-align: left; }
+.form-box {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.7);
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
-.modal-content {
+.form-content {
     background: white;
     padding: 40px;
     border-radius: 30px;
+    width: 90%;
+    max-width: 500px;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
-.close-btn {
-    background: #e74c3c;
-    color: white;
-    padding: 10px 20px;
-    margin-top: 20px;
-    border-radius: 50px;
+.form-content input, .form-content textarea {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 15px;
+    border: 2px solid #bdc3c7;
+    font-size: 1.2em;
 }
-footer {
-    margin-top: 60px;
-    padding-top: 30px;
-    border-top: 3px dashed #e74c3c;
-    color: #c0392b;
-    font-weight: bold;
-}
+.form-content textarea { height: 150px; resize: vertical; }
+.form-buttons { margin-top: 20px; }
+.close-btn { background: #e74c3c; color: white; padding: 12px 25px; border-radius: 50px; margin-left: 10px; }
+footer { margin-top: 60px; padding-top: 30px; padding-bottom: 40px; border-top: 3px dashed #e74c3c; color: #c0392b; font-weight: bold; }
+.footer-buttons { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+.footer-buttons button { padding: 18px 40px; font-size: 1.3em; }
 .hidden { display: none; }
