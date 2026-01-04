@@ -3,144 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WEBSITE HỌC TIẾNG ANH TẠO BỞI NGUYỄN CHÍ DỰ</title>
-    <style>
-        /* Tất cả style nhúng luôn trong này, không cần file css riêng */
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #ff6b6b, #feca57, #ff9ff3);
-            margin: 0;
-            padding: 20px;
-            color: #333;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            text-align: center;
-            border: 5px solid #e74c3c;
-        }
-        h1 {
-            font-size: 3em;
-            color: #c0392b;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-        }
-        .subtitle {
-            font-style: italic;
-            color: #e74c3c;
-            font-size: 1.2em;
-            margin-bottom: 30px;
-        }
-        .section {
-            margin: 40px 0;
-            padding: 20px;
-            background: rgba(231, 76, 60, 0.1);
-            border-radius: 15px;
-        }
-        h2 {
-            color: #e74c3c;
-            margin-bottom: 20px;
-        }
-        ul {
-            text-align: left;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.8;
-        }
-        .vocab {
-            font-size: 1.3em;
-            margin: 15px 0;
-        }
-        .vocab span {
-            font-weight: bold;
-            color: #e74c3c;
-        }
-        footer {
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 3px solid #e74c3c;
-            color: #c0392b;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-        button {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border-radius: 50px;
-            cursor: pointer;
-            margin: 10px;
-            box-shadow: 0 5px 15px rgba(231,76,60,0.4);
-        }
-        button:hover {
-            background: #c0392b;
-            transform: translateY(-3px);
-        }
-        .report-btn {
-            background: #f39c12;
-        }
-        .report-btn:hover {
-            background: #e67e22;
-        }
-    </style>
+    <title>Học Tiếng Anh Cùng Chí Dự 🇻🇳</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>🇻🇳 Học Tiếng Anh Cùng Chí Dự 🇻🇳</h1>
-        <p class="subtitle">Website đơn giản - dễ học - Made in Vietnam ❤️</p>
+        <header>
+            <h1>🇻🇳 Học Tiếng Anh Cùng Chí Dự 🇻🇳</h1>
+            <p class="subtitle">Chơi vui vẻ nha, gặp bug bấm REPORT bên dưới luôn! ❤️</p>
+        </header>
 
-        <div class="section">
-            <h2>📚 Một Số Từ Vựng Cơ Bản</h2>
-            <div class="vocab">Hello - <span>Xin chào</span></div>
-            <div class="vocab">Goodbye - <span>Tạm biệt</span></div>
-            <div class="vocab">Thank you - <span>Cảm ơn</span></div>
-            <div class="vocab">Please - <span>Làm ơn</span></div>
-            <div class="vocab">Yes - <span>Có</span></div>
-            <div class="vocab">No - <span>Không</span></div>
-            <div class="vocab">Water - <span>Nước</span></div>
-            <div class="vocab">Apple - <span>Quả táo</span></div>
-            <div class="vocab">Book - <span>Quyển sách</span></div>
-            <div class="vocab">Family - <span>Gia đình</span></div>
+        <div class="controls">
+            <button id="status-btn">ℹ️ Thông Tin & Status</button>
+            <button id="report-btn">🐛 Report Bug</button>
         </div>
 
-        <div class="section">
-            <h2>💡 Câu Giao Tiếp Hằng Ngày</h2>
+        <!-- Phần Thông Tin & Status - bấm nút là hiện/ẩn -->
+        <div id="status-info" class="info-box hidden">
+            <h3>ℹ️ Thông Tin & Status (Phiên bản hiện tại)</h3>
+            <p><strong>Phiên bản:</strong> 4.0 - Siêu Ổn Định (04/01/2026)</p>
+            <p><strong>Tác giả:</strong> Nguyễn Chí Dự 🇻🇳 (OWNER)</p>
+            <p><strong>Trạng thái:</strong> <span class="status-online">🟢 Online & Hoạt động tốt</span></p>
+            <h4>Cập nhật mới nhất:</h4>
             <ul>
-                <li>Good morning! → Chào buổi sáng!</li>
-                <li>How are you? → Bạn khỏe không?</li>
-                <li>I'm fine, thank you → Tôi khỏe, cảm ơn</li>
-                <li>What's your name? → Bạn tên gì?</li>
-                <li>My name is Chí Dự → Tên tôi là Chí Dự</li>
-                <li>Nice to meet you → Rất vui được gặp bạn</li>
+                <li>Bỏ modal phức tạp → Không còn lỗi không tắt được nữa!</li>
+                <li>Thêm nút "Thông Tin & Status" hiện/ẩn mượt mà</li>
+                <li>Giao diện đẹp hơn, dễ thương, Made in VN ❤️</li>
+                <li>Chỉ dùng HTML + CSS + JS nhẹ → Không lỗi cache</li>
+                <li>Thêm trạng thái online/offline cho vui</li>
             </ul>
+            <p>Chúc bạn học tiếng Anh vui vẻ và tiến bộ mỗi ngày! 📚✨</p>
         </div>
 
-        <div class="section">
-            <h2>ℹ️ Thông Tin & Update</h2>
-            <p><strong>Phiên bản:</strong> 1.0 Simple HTML (01/2026)</p>
-            <p><strong>Tác giả:</strong> Nguyễn Chí Dự 🇻🇳</p>
-            <p>Website này được làm hoàn toàn bằng HTML thuần, không JavaScript phức tạp, không lỗi modal, không cache!</p>
-            <p>Cập nhật mới: Chuyển sang phiên bản đơn giản nhất để dễ dùng và không lỗi nữa ❤️</p>
-            <p>Gặp lỗi hay góp ý? Vui lòng bấm nút bên dưới nha!</p>
+        <div class="main-content">
+            <h2>Chào mừng bạn đến với website học tiếng Anh đơn giản!</h2>
+            <p>Bạn có thể thêm quiz, từ vựng, bài học ở đây sau nha.</p>
+            <p>Hiện tại đang là phiên bản đơn giản nhất – ổn định nhất – không lỗi!</p>
         </div>
-
-        <button onclick="alert('Cảm ơn bạn đã học tiếng Anh cùng Chí Dự! ❤️🇻🇳')">Học Thêm Nữa Đi!</button>
-        <button class="report-btn" onclick="window.open('https://github.com/herogoodboyvngaming', '_blank')">
-            🐛 Report Bug / Góp Ý
-        </button>
 
         <footer>
             <p>Made in VN 🇻🇳♥️</p>
             <p>Made by: <strong>Nguyễn Chí Dự</strong> (OWNER)</p>
-            <p>Chúc bạn học tiếng Anh vui vẻ và tiến bộ mỗi ngày! 📚✨</p>
         </footer>
     </div>
+
+    <script>
+        // Chỉ 10 dòng JS siêu nhẹ để bấm nút hiện/ẩn thông tin – không lỗi, không cache nặng
+        document.getElementById('status-btn').addEventListener('click', function() {
+            const info = document.getElementById('status-info');
+            info.classList.toggle('hidden');
+            this.textContent = info.classList.contains('hidden') ? 'ℹ️ Thông Tin & Status' : 'ℹ️ Ẩn Thông Tin';
+        });
+
+        // Report Bug
+        document.getElementById('report-btn').addEventListener('click', function() {
+            window.open('https://github.com/herogoodboyvngaming/[LEARN-ENGLISH-]/issues', '_blank');
+        });
+    </script>
 </body>
 </html>
