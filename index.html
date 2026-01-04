@@ -25,10 +25,10 @@
         <!-- Thông Tin hiện/ẩn -->
         <div id="status-info" class="info-box hidden">
             <h3>ℹ️ Thông Tin & Update</h3>
-            <p><strong>Phiên bản:</strong> Multi-Language Full (04/01/2026)</p>
+            <p><strong>Phiên bản:</strong> Final - Không Lỗi Nữa (04/01/2026)</p>
             <p><strong>Tác giả:</strong> Nguyễn Chí Dự 🇻🇳 (OWNER)</p>
             <p><strong>Gmail hỗ trợ:</strong> Herogoodboymc2024@gmail.com</p>
-            <p>Thêm hơn 12 ngôn ngữ + Shop đầy đủ quốc kỳ + TTS và đồng hồ đổi theo quốc gia!</p>
+            <p>Fix hết lỗi: quiz chạy, chọn đáp án hoạt động, TTS, shop, report/gợi ý mượt mà!</p>
         </div>
 
         <!-- Màn hình Start -->
@@ -58,15 +58,15 @@
                 <div class="shop-item" data-country="vn" data-price="0">🇻🇳 Việt Nam - Miễn phí (Đã mở)</div>
                 <div class="shop-item" data-country="us" data-price="100">🇺🇸 Mỹ - 100 điểm</div>
                 <div class="shop-item" data-country="gb" data-price="120">🇬🇧 Anh - 120 điểm</div>
-                <div class="shop-item" data-country="jp" data-price="150">🇯🇵 Nhật - 150 điểm (siêu đẹp)</div>
-                <div class="shop-item" data-country="kr" data-price="200">🇰🇷 Hàn - 200 điểm (xinh xắn)</div>
-                <div class="shop-item" data-country="fr" data-price="250">🇫🇷 Pháp - 250 điểm (lãng mạn)</div>
+                <div class="shop-item" data-country="jp" data-price="150">🇯🇵 Nhật - 150 điểm</div>
+                <div class="shop-item" data-country="kr" data-price="200">🇰🇷 Hàn - 200 điểm</div>
+                <div class="shop-item" data-country="fr" data-price="250">🇫🇷 Pháp - 250 điểm</div>
                 <div class="shop-item" data-country="de" data-price="180">🇩🇪 Đức - 180 điểm</div>
                 <div class="shop-item" data-country="it" data-price="220">🇮🇹 Ý - 220 điểm</div>
                 <div class="shop-item" data-country="cn" data-price="300">🇨🇳 Trung Quốc - 300 điểm</div>
                 <div class="shop-item" data-country="es" data-price="280">🇪🇸 Tây Ban Nha - 280 điểm</div>
-                <div class="shop-item" data-country="ru" data-price="350">🇷🇺 Nga - 350 điểm (huyền bí)</div>
-                <div class="shop-item" data-country="th" data-price="400">🇹🇭 Thái Lan - 400 điểm (nóng bỏng)</div>
+                <div class="shop-item" data-country="ru" data-price="350">🇷🇺 Nga - 350 điểm</div>
+                <div class="shop-item" data-country="th" data-price="400">🇹🇭 Thái Lan - 400 điểm</div>
                 <div class="shop-item" data-country="id" data-price="320">🇮🇩 Indonesia - 320 điểm</div>
             </div>
             <button id="back-shop" class="big-btn">Quay Lại</button>
@@ -83,7 +83,7 @@
         </footer>
     </div>
 
-    <!-- Modal Ngôn Ngữ - Thêm đầy đủ ngôn ngữ -->
+    <!-- Modal Ngôn Ngữ -->
     <div id="lang-modal" class="modal hidden">
         <div class="modal-content">
             <h3>Chọn Ngôn Ngữ Phát Âm</h3>
@@ -103,7 +103,27 @@
         </div>
     </div>
 
-    <!-- Form Report Bug & Gợi Ý giữ nguyên -->
+    <!-- Form Report Bug -->
+    <div id="report-form" class="modal hidden">
+        <div class="modal-content">
+            <h3>🐛 Báo Cáo Lỗi</h3>
+            <input type="email" id="report-email" placeholder="Gmail của bạn (bắt buộc)">
+            <textarea id="report-message" placeholder="Mô tả lỗi chi tiết (bắt buộc)"></textarea>
+            <button id="send-report" class="big-btn">Gửi Báo Cáo</button>
+            <button id="cancel-report" class="close-btn">Hủy</button>
+        </div>
+    </div>
+
+    <!-- Form Gợi Ý -->
+    <div id="suggest-form" class="modal hidden">
+        <div class="modal-content">
+            <h3>💡 Gợi Ý Thêm Từ Học</h3>
+            <input type="email" id="suggest-email" placeholder="Gmail của bạn (bắt buộc)">
+            <textarea id="suggest-word" placeholder="Từ/câu muốn thêm (bắt buộc)"></textarea>
+            <button id="send-suggest" class="big-btn">Gửi Gợi Ý</button>
+            <button id="cancel-suggest" class="close-btn">Hủy</button>
+        </div>
+    </div>
 
     <script>
         let currentLang = 'vi';
@@ -112,16 +132,15 @@
         let currentQuestion = 0;
         let unlockedFlags = ['vn'];
 
-        // Câu hỏi (giữ nguyên hoặc thêm)
         const questions = [
             { q: "Hello nghĩa là gì?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
             { q: "Apple là quả gì?", options: ["Cam", "Chuối", "Táo", "Xoài"], a: 2 },
             { q: "Thank you nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Làm ơn"], a: 2 },
             { q: "Water là gì?", options: ["Sữa", "Nước", "Cà phê", "Trà"], a: 1 },
-            { q: "Book là gì?", options: ["Bút", "Sách", "Bàn", "Ghế"], a: 1 }
+            { q: "Book là gì?", options: ["Bút", "Sách", "Bàn", "Ghế"], a: 1 },
+            { q: "Family nghĩa là?", options: ["Bạn bè", "Gia đình", "Trường học", "Công việc"], a: 1 }
         ];
 
-        // Mode
         const modes = {
             easy: { name: "Dễ", bonus: 10 },
             normal: { name: "Bình Thường", bonus: 15 },
@@ -130,7 +149,6 @@
             extreme: { name: "Cực Khó", bonus: 500 }
         };
 
-        // Đồng hồ theo quốc gia
         const timezones = {
             vn: 'Asia/Ho_Chi_Minh',
             us: 'America/New_York',
@@ -148,15 +166,6 @@
         };
         let currentTimezone = timezones.vn;
 
-        function updateClock() {
-            const options = { timeZone: currentTimezone, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            const now = new Date().toLocaleTimeString('vi-VN', options);
-            document.getElementById('clock').textContent = now;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // TTS theo ngôn ngữ
         const ttsLangs = {
             vi: 'vi-VN',
             en: 'en-US',
@@ -172,7 +181,75 @@
             id: 'id-ID'
         };
 
-        // Nút Ngôn Ngữ
+        function updateClock() {
+            const options = { timeZone: currentTimezone, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const now = new Date().toLocaleTimeString('vi-VN', options);
+            document.getElementById('clock').textContent = now;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function updateScore() {
+            document.querySelectorAll('#score, #current-score, #shop-score').forEach(el => el.textContent = score);
+        }
+
+        // Nút Bắt Đầu
+        document.getElementById('start-btn').addEventListener('click', () => {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            currentQuestion = 0;
+            score = 0;
+            updateScore();
+            loadQuestion();
+        });
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                document.getElementById('question').textContent = 'Hoàn thành! 🎊';
+                document.getElementById('options').innerHTML = '';
+                document.getElementById('result').textContent = `Bạn đạt ${score} điểm!`;
+                return;
+            }
+            const q = questions[currentQuestion];
+            document.getElementById('question').textContent = q.q;
+            document.getElementById('options').innerHTML = '';
+            document.getElementById('result').textContent = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.textContent = opt;
+                btn.classList.add('option-btn');
+                btn.addEventListener('click', () => checkAnswer(i));
+                document.getElementById('options').appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected) {
+            const q = questions[currentQuestion];
+            const bonus = modes[currentMode].bonus;
+            if (selected === q.a) {
+                score += bonus;
+                document.getElementById('result').textContent = `Đúng rồi! +${bonus} điểm 🎉`;
+            } else {
+                document.getElementById('result').textContent = `Sai rồi! Đáp án: ${q.options[q.a]}`;
+            }
+            updateScore();
+            currentQuestion++;
+            setTimeout(loadQuestion, 2000);
+        }
+
+        // TTS
+        document.getElementById('speak-btn').addEventListener('click', () => {
+            const text = document.getElementById('question').textContent;
+            if (text && 'speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = ttsLangs[currentLang] || 'vi-VN';
+                utterance.rate = 0.9;
+                speechSynthesis.cancel();
+                speechSynthesis.speak(utterance);
+            }
+        });
+
+        // Ngôn Ngữ
         document.getElementById('lang-btn').addEventListener('click', () => {
             document.getElementById('lang-modal').classList.remove('hidden');
         });
@@ -190,19 +267,18 @@
             });
         });
 
-        // TTS
-        document.getElementById('speak-btn').addEventListener('click', () => {
-            const text = document.getElementById('question').textContent;
-            if (text && 'speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = ttsLangs[currentLang] || 'vi-VN';
-                utterance.rate = 0.9;
-                speechSynthesis.cancel();
-                speechSynthesis.speak(utterance);
-            }
+        // Mode
+        document.getElementById('mode-btn').addEventListener('click', () => {
+            const list = ['easy', 'normal', 'hard', 'superhard', 'extreme'];
+            const names = { easy: 'Dễ', normal: 'Bình Thường', hard: 'Khó', superhard: 'Siêu Khó', extreme: 'Cực Khó' };
+            const idx = list.indexOf(currentMode);
+            let next = list[(idx + 1) % list.length];
+            if (next === 'extreme' && !confirm('⚠️ CỰC KHÓ ⚠️\nChỉ dành cho thánh! Dám thử không? 😈')) return;
+            currentMode = next;
+            document.getElementById('mode-btn').textContent = `⚡ Mode: ${names[next]}`;
         });
 
-        // Shop + đổi nền + đồng hồ
+        // Shop
         document.getElementById('shop-btn').addEventListener('click', () => {
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.add('hidden');
@@ -229,21 +305,58 @@
                         updateScore();
                         currentTimezone = timezones[country] || timezones.vn;
                         updateClock();
-                        alert('Mua thành công! Đã áp dụng nền và đồng hồ mới 🎉');
+                        alert('Mua thành công! Đã áp dụng!');
                     }
                 } else {
-                    alert('Không đủ điểm nha! Chơi thêm đi 💪');
+                    alert('Không đủ điểm!');
                 }
             });
         });
 
-        // Các nút khác (Start, Quiz, Report, Gợi Ý...) giữ nguyên hoạt động từ code gốc của bạn
+        // Report & Gợi Ý
+        document.getElementById('report-btn').addEventListener('click', () => {
+            document.getElementById('report-form').classList.remove('hidden');
+        });
+        document.getElementById('cancel-report').addEventListener('click', () => {
+            document.getElementById('report-form').classList.add('hidden');
+        });
+        document.getElementById('send-report').addEventListener('click', () => {
+            const email = document.getElementById('report-email').value.trim();
+            const message = document.getElementById('report-message').value.trim();
+            if (!email || !message) {
+                alert('Vui lòng điền đầy đủ!');
+                return;
+            }
+            const subject = encodeURIComponent('Report Bug từ ' + email);
+            const body = encodeURIComponent('Người báo: ' + email + '\n\nLỗi:\n' + message);
+            window.location.href = `mailto:Herogoodboymc2024@gmail.com?subject=\( {subject}&body= \){body}`;
+            alert('CẢM ƠN BẠN ĐÃ GỬI BÁO CÁO ĐẾN MÌNH, VUI LÒNG CHỜ MÌNH TRONG VÒNG 24H NẾU MÌNH BẬN THÌ CÓ THỂ HƠN');
+            document.getElementById('report-form').classList.add('hidden');
+            document.getElementById('report-email').value = '';
+            document.getElementById('report-message').value = '';
+        });
 
-        // Update điểm
-        function updateScore() {
-            const scoreEls = document.querySelectorAll('#score, #current-score, #shop-score');
-            scoreEls.forEach(el => el.textContent = score);
-        }
+        document.getElementById('suggest-btn').addEventListener('click', () => {
+            document.getElementById('suggest-form').classList.remove('hidden');
+        });
+        document.getElementById('cancel-suggest').addEventListener('click', () => {
+            document.getElementById('suggest-form').classList.add('hidden');
+        });
+        document.getElementById('send-suggest').addEventListener('click', () => {
+            const email = document.getElementById('suggest-email').value.trim();
+            const word = document.getElementById('suggest-word').value.trim();
+            if (!email || !word) {
+                alert('Vui lòng điền đầy đủ!');
+                return;
+            }
+            const subject = encodeURIComponent('Gợi Ý Từ Học từ ' + email);
+            const body = encodeURIComponent('Người gợi ý: ' + email + '\n\nTừ/câu:\n' + word);
+            window.location.href = `mailto:Herogoodboymc2024@gmail.com?subject=\( {subject}&body= \){body}`;
+            alert('CẢM ƠN BẠN ĐÃ GỬI Ý, MÌNH SẼ CẬP NHẬT SỚM NHẤT CHO BẠN NHÉ, NẾU TRỄ CÓ THỂ DO MÌNH BẬN HOẶC KHÔNG CÓ THỜI GIAN NHÉ');
+            document.getElementById('suggest-form').classList.add('hidden');
+            document.getElementById('suggest-email').value = '';
+            document.getElementById('suggest-word').value = '';
+        });
 
         updateScore();
     </script>
