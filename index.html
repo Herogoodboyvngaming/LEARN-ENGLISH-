@@ -263,13 +263,17 @@
             }
         });
 
-        // Từ Bỏ (tốn 10 điểm)
+        // Từ Bỏ (tốn 10 điểm - CHỈ KHI ĐỦ ĐIỂM MỚI ĐƯỢC)
         document.getElementById('quit-btn').addEventListener('click', () => {
-            if (confirm('Bạn đồng ý trừ 10 điểm để từ bỏ chứ?')) {
-                score -= 10;
-                updateScore();
-                document.getElementById('quiz-screen').classList.add('hidden');
-                document.getElementById('start-screen').classList.remove('hidden');
+            if (score >= 10) {
+                if (confirm('Bạn đồng ý trừ 10 điểm để từ bỏ chứ?')) {
+                    score -= 10;
+                    updateScore();
+                    document.getElementById('quiz-screen').classList.add('hidden');
+                    document.getElementById('start-screen').classList.remove('hidden');
+                }
+            } else {
+                alert('Không đủ điểm để từ bỏ nha! Hãy cố gắng thêm chút nữa 💪');
             }
         });
 
@@ -367,7 +371,7 @@
             });
         });
 
-        // Report Bug - ĐÃ SỬA LỖI MAILTO
+        // Report Bug
         document.getElementById('report-btn').addEventListener('click', () => {
             document.getElementById('report-form').classList.remove('hidden');
         });
@@ -390,7 +394,7 @@
             document.getElementById('report-message').value = '';
         });
 
-        // Gợi Ý Thêm Từ Học - ĐÃ SỬA LỖI MAILTO
+        // Gợi Ý Thêm Từ Học
         document.getElementById('suggest-btn').addEventListener('click', () => {
             document.getElementById('suggest-form').classList.remove('hidden');
         });
