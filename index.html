@@ -25,10 +25,10 @@
         <!-- Thông Tin hiện/ẩn -->
         <div id="status-info" class="info-box hidden">
             <h3>ℹ️ Thông Tin & Update</h3>
-            <p><strong>Phiên bản:</strong> Hoàn Hảo Với Nút Restart/Skip/Từ Bỏ/Reset (04/01/2026)</p>
+            <p><strong>Phiên bản:</strong> Hoàn Hảo Với Nút Trở Về Menu Chính (04/01/2026)</p>
             <p><strong>Tác giả:</strong> Nguyễn Chí Dự 🇻🇳 (OWNER)</p>
             <p><strong>Gmail hỗ trợ:</strong> Herogoodboymc2024@gmail.com</p>
-            <p>Thêm nút Restart, Skip (tốn 30đ), Từ Bỏ (tốn 10đ), Reset điểm - có xác nhận hết!</p>
+            <p>Thêm nút Trở Về Menu Chính trong quiz - không trừ điểm!</p>
         </div>
 
         <!-- Màn hình Start -->
@@ -52,6 +52,7 @@
                 <button id="restart-btn">🔄 Chơi Lại</button>
                 <button id="reset-score-btn">🗑️ Reset Điểm</button>
                 <button id="quit-btn">✖️ Từ Bỏ (-10đ)</button>
+                <button id="back-menu-btn">🏠 Trở Về Menu Chính</button> <!-- NÚT MỚI THÊM -->
             </div>
 
             <div id="result"></div>
@@ -263,7 +264,7 @@
             }
         });
 
-        // Từ Bỏ (tốn 10 điểm - CHỈ KHI ĐỦ ĐIỂM MỚI ĐƯỢC)
+        // Từ Bỏ (tốn 10 điểm - chỉ khi đủ điểm)
         document.getElementById('quit-btn').addEventListener('click', () => {
             if (score >= 10) {
                 if (confirm('Bạn đồng ý trừ 10 điểm để từ bỏ chứ?')) {
@@ -292,6 +293,14 @@
             if (confirm('Bạn chắc muốn reset điểm về 0 chứ?')) {
                 score = 0;
                 updateScore();
+            }
+        });
+
+        // NÚT TRỞ VỀ MENU CHÍNH MỚI THÊM
+        document.getElementById('back-menu-btn').addEventListener('click', () => {
+            if (confirm('Bạn muốn trở về menu chính? (Điểm hiện tại sẽ giữ nguyên)')) {
+                document.getElementById('quiz-screen').classList.add('hidden');
+                document.getElementById('start-screen').classList.remove('hidden');
             }
         });
 
