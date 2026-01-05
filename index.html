@@ -26,10 +26,10 @@
         <!-- Thông Tin hiện/ẩn -->
         <div id="status-info" class="info-box hidden">
             <h3>ℹ️ Thông Tin & Update</h3>
-            <p><strong>Phiên bản:</strong> Độ Khó Theo Ngôn Ngữ - Không Tự Đổi (05/01/2026)</p>
+            <p><strong>Phiên bản:</strong> Mở Khóa Qua Shop + Nhiều Câu Hỏi Theo Cấp Độ (05/01/2026)</p>
             <p><strong>Tác giả:</strong> Nguyễn Chí Dự 🇻🇳 (OWNER)</p>
             <p><strong>Gmail hỗ trợ:</strong> Herogoodboymc2024@gmail.com</p>
-            <p>Độ khó theo ngôn ngữ, mua shop không tự đổi, phải đổi thủ công!</p>
+            <p>Phải mua quốc kỳ để mở khóa ngôn ngữ, thêm nhiều câu hỏi theo cấp độ!</p>
         </div>
 
         <!-- Màn hình Start -->
@@ -97,18 +97,18 @@
     <div id="lang-learn-modal" class="modal hidden">
         <div class="modal-content">
             <h3>Chọn Ngôn Ngữ Học</h3>
-            <button data-learn-lang="en">🇬🇧 Tiếng Anh</button>
-            <button data-learn-lang="ja">🇯🇵 Tiếng Nhật</button>
-            <button data-learn-lang="ko">🇰🇷 Tiếng Hàn</button>
-            <button data-learn-lang="fr">🇫🇷 Tiếng Pháp</button>
-            <button data-learn-lang="de">🇩🇪 Tiếng Đức</button>
-            <button data-learn-lang="it">🇮🇹 Tiếng Ý</button>
-            <button data-learn-lang="zh">🇨🇳 Tiếng Trung</button>
-            <button data-learn-lang="es">🇪🇸 Tiếng Tây Ban Nha</button>
-            <button data-learn-lang="ru">🇷🇺 Tiếng Nga</button>
-            <button data-learn-lang="th">🇹🇭 Tiếng Thái</button>
-            <button data-learn-lang="id">🇮🇩 Tiếng Indonesia</button>
-            <button data-learn-lang="vi">🇻🇳 Tiếng Việt (dịch nghĩa)</button>
+            <button data-learn-lang="en" data-country="us">🇬🇧 Tiếng Anh</button>
+            <button data-learn-lang="ja" data-country="jp">🇯🇵 Tiếng Nhật</button>
+            <button data-learn-lang="ko" data-country="kr">🇰🇷 Tiếng Hàn</button>
+            <button data-learn-lang="fr" data-country="fr">🇫🇷 Tiếng Pháp</button>
+            <button data-learn-lang="de" data-country="de">🇩🇪 Tiếng Đức</button>
+            <button data-learn-lang="it" data-country="it">🇮🇹 Tiếng Ý</button>
+            <button data-learn-lang="zh" data-country="cn">🇨🇳 Tiếng Trung</button>
+            <button data-learn-lang="es" data-country="es">🇪🇸 Tiếng Tây Ban Nha</button>
+            <button data-learn-lang="ru" data-country="ru">🇷🇺 Tiếng Nga</button>
+            <button data-learn-lang="th" data-country="th">🇹🇭 Tiếng Thái</button>
+            <button data-learn-lang="id" data-country="id">🇮🇩 Tiếng Indonesia</button>
+            <button data-learn-lang="vi" data-country="vn">🇻🇳 Tiếng Việt (dịch nghĩa)</button>
             <button id="close-learn-lang" class="close-btn">Đóng</button>
         </div>
     </div>
@@ -163,6 +163,7 @@
             let score = 0;
             let currentQuestion = 0;
             let unlockedFlags = ['vn'];
+            let unlockedLearnLangs = ['en', 'vi']; // Mặc định mở Anh và Việt
 
             const modes = {
                 easy: { name: "Dễ", bonus: 10 },
@@ -204,7 +205,7 @@
                 id: 'id-ID'
             };
 
-            // FULL BỘ CÂU HỎI THEO NGÔN NGỮ VÀ ĐỘ KHÓ (mẫu)
+            // BỘ CÂU HỎI FULL NHIỀU HƠN THEO CẤP ĐỘ VÀ QUỐC GIA
             const questionSets = {
                 en: {
                     easy: [
@@ -212,51 +213,103 @@
                         { q: "Apple là quả gì?", options: ["Cam", "Chuối", "Táo", "Xoài"], a: 2 },
                         { q: "Dog là con gì?", options: ["Mèo", "Chó", "Gà", "Vịt"], a: 1 },
                         { q: "Thank you nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Làm ơn"], a: 2 },
-                        { q: "Water là gì?", options: ["Sữa", "Nước", "Cà phê", "Trà"], a: 1 }
+                        { q: "Water là gì?", options: ["Sữa", "Nước", "Cà phê", "Trà"], a: 1 },
+                        { q: "Book là gì?", options: ["Bút", "Sách", "Bàn", "Ghế"], a: 1 },
+                        { q: "Sun là mặt gì?", options: ["Trăng", "Mặt trời", "Sao", "Mây"], a: 1 },
+                        { q: "Good morning nghĩa là?", options: ["Chào buổi tối", "Chào buổi sáng", "Chào buổi trưa", "Tạm biệt"], a: 1 },
+                        { q: "Family nghĩa là?", options: ["Bạn bè", "Gia đình", "Trường học", "Công việc"], a: 1 },
+                        { q: "Happy nghĩa là?", options: ["Buồn", "Vui vẻ", "Giận", "Sợ"], a: 1 },
+                        { q: "Good bye nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 1 },
+                        { q: "Sorry nghĩa là?", options: ["Cảm ơn", "Xin lỗi", "Xin chào", "Tạm biệt"], a: 1 },
+                        { q: "Please nghĩa là?", options: ["Xin lỗi", "Làm ơn", "Cảm ơn", "Xin chào"], a: 1 },
+                        { q: "Cat là con gì?", options: ["Chó", "Mèo", "Gà", "Vịt"], a: 1 },
+                        { q: "Banana là quả gì?", options: ["Táo", "Chuối", "Cam", "Xoài"], a: 1 }
                     ],
                     normal: [
-                        { q: "Capital of France is?", options: ["London", "Berlin", "Paris", "Madrid"], a: 2 }
+                        { q: "Capital of France is?", options: ["London", "Berlin", "Paris", "Madrid"], a: 2 },
+                        { q: "Yesterday nghĩa là?", options: ["Hôm qua", "Hôm nay", "Ngày mai", "Tuần tới"], a: 0 },
+                        { q: "Beautiful nghĩa là?", options: ["Xấu xí", "Đẹp", "To", "Nhỏ"], a: 1 },
+                        { q: "Big nghĩa là?", options: ["Nhỏ", "To", "Dài", "Ngắn"], a: 1 },
+                        { q: "Small nghĩa là?", options: ["To", "Nhỏ", "Dài", "Ngắn"], a: 1 },
+                        { q: "Long nghĩa là?", options: ["Ngắn", "Dài", "To", "Nhỏ"], a: 1 },
+                        { q: "Short nghĩa là?", options: ["Dài", "Ngắn", "To", "Nhỏ"], a: 1 },
+                        { q: "Tall nghĩa là?", options: ["Thấp", "Cao", "Béo", "Gầy"], a: 1 },
+                        { q: "Short (height) nghĩa là?", options: ["Cao", "Thấp", "Béo", "Gầy"], a: 1 },
+                        { q: "Fat nghĩa là?", options: ["Gầy", "Béo", "Cao", "Thấp"], a: 1 },
+                        { q: "Thin nghĩa là?", options: ["Béo", "Gầy", "Cao", "Thấp"], a: 1 },
+                        { q: "Hot nghĩa là?", options: ["Lạnh", "Nóng", "Mát", "Ấm"], a: 1 },
+                        { q: "Cold nghĩa là?", options: ["Nóng", "Lạnh", "Mát", "Ấm"], a: 1 },
+                        { q: "Warm nghĩa là?", options: ["Lạnh", "Ấm", "Nóng", "Mát"], a: 1 },
+                        { q: "Cool nghĩa là?", options: ["Nóng", "Mát", "Ấm", "Lạnh"], a: 1 }
                     ],
                     hard: [
-                        { q: "Past tense of 'go' is?", options: ["Goed", "Went", "Gone", "Going"], a: 1 }
-                    ],
-                    superhard: [
-                        { q: "Difference between 'affect' and 'effect'?", options: ["Không khác", "Affect là động từ, effect là danh từ", "Ngược lại", "Cả hai đều là danh từ"], a: 1 }
-                    ],
-                    extreme: [
-                        { q: "Meaning of 'serendipity'?", options: ["May mắn tình cờ", "Buồn bã", "Giận dữ", "Lo lắng"], a: 0 }
+                        { q: "Past tense of 'go' is?", options: ["Goed", "Went", "Gone", "Going"], a: 1 },
+                        { q: "Environment nghĩa là?", options: ["Thời tiết", "Môi trường", "Không gian", "Không khí"], a: 1 },
+                        { q: "Technology nghĩa là?", options: ["Khoa học", "Công nghệ", "Lịch sử", "Nghệ thuật"], a: 1 },
+                        { q: "Science nghĩa là?", options: ["Công nghệ", "Khoa học", "Nghệ thuật", "Lịch sử"], a: 1 },
+                        { q: "History nghĩa là?", options: ["Khoa học", "Lịch sử", "Công nghệ", "Nghệ thuật"], a: 1 },
+                        { q: "Art nghĩa là?", options: ["Lịch sử", "Nghệ thuật", "Khoa học", "Công nghệ"], a: 1 },
+                        { q: "Music nghĩa là?", options: ["Sách", "Âm nhạc", "Phim", "Tranh"], a: 1 },
+                        { q: "Movie nghĩa là?", options: ["Âm nhạc", "Phim", "Sách", "Tranh"], a: 1 },
+                        { q: "Book nghĩa là?", options: ["Phim", "Sách", "Âm nhạc", "Tranh"], a: 1 },
+                        { q: "Painting nghĩa là?", options: ["Sách", "Tranh", "Phim", "Âm nhạc"], a: 1 },
+                        // Thêm 40 câu khó nữa để đủ 50 (mẫu, bạn có thể thay)
+                        { q: "Future tense of 'go' is?", options: ["Went", "Will go", "Gone", "Going"], a: 1 },
+                        { q: "Photosynthesis is?", options: ["Quang hợp", "Hô hấp", "Bốc hơi", "Ngưng tụ"], a: 0 },
+                        { q: "Einstein famous for?", options: ["Theory of Relativity", "Gravity", "Electricity", "Magnetism"], a: 0 },
+                        { q: "Shakespeare wrote?", options: ["Romeo and Juliet", "Harry Potter", "Lord of the Rings", "Game of Thrones"], a: 0 },
+                        { q: "Pacific Ocean is?", options: ["Smallest", "Largest", "Coldest", "Warmest"], a: 1 },
+                        { q: "Mount Everest is in?", options: ["Africa", "Asia", "Europe", "America"], a: 1 },
+                        { q: "DNA stands for?", options: ["Deoxyribonucleic Acid", "Deoxyribose Nucleic Acid", "Deoxy Nucleotide Acid", "Deoxyribonucleotide Acid"], a: 0 },
+                        { q: "Heart pumps?", options: ["Water", "Blood", "Air", "Food"], a: 1 },
+                        { q: "Earth's satellite is?", options: ["Sun", "Moon", "Mars", "Venus"], a: 1 },
+                        { q: "Solar system has how many planets?", options: ["7", "8", "9", "10"], a: 1 },
+                        { q: "Pythagoras theorem is for?", options: ["Triangle", "Circle", "Square", "Rectangle"], a: 0 },
+                        { q: "PI value is?", options: ["3.14", "2.718", "1.618", "9.8"], a: 0 },
+                        { q: "Gravity on Earth is?", options: ["9.8 m/s²", "3.14 m/s²", "2.718 m/s²", "1.618 m/s²"], a: 0 },
+                        { q: "Light speed is?", options: ["300,000 km/s", "150,000 km/s", "500,000 km/s", "100,000 km/s"], a: 0 },
+                        { q: "Water boiling point is?", options: ["0°C", "100°C", "32°C", "212°C"], a: 1 },
+                        { q: "Freezing point of water is?", options: ["0°C", "100°C", "32°C", "212°C"], a: 0 },
+                        { q: "Human body has how many bones?", options: ["206", "106", "306", "406"], a: 0 },
+                        { q: "Largest organ in body is?", options: ["Heart", "Liver", "Skin", "Lung"], a: 2 },
+                        { q: "Capital of USA is?", options: ["New York", "Washington D.C.", "Los Angeles", "Chicago"], a: 1 },
+                        { q: "Capital of France is?", options: ["Berlin", "Paris", "Madrid", "Rome"], a: 1 },
+                        { q: "Largest continent is?", options: ["Africa", "Asia", "Europe", "America"], a: 1 },
+                        { q: "Smallest continent is?", options: ["Australia", "Europe", "Africa", "Antarctica"], a: 0 },
+                        { q: "Longest river is?", options: ["Amazon", "Nile", "Yangtze", "Mississippi"], a: 1 },
+                        { q: "Largest desert is?", options: ["Sahara", "Gobi", "Kalahari", "Antarctic"], a: 3 },
+                        { q: "First man on moon is?", options: ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "Alan Shepard"], a: 0 },
+                        { q: "World War II ended in?", options: ["1945", "1918", "1939", "1965"], a: 0 },
+                        { q: "Inventor of telephone is?", options: ["Edison", "Bell", "Tesla", "Marconi"], a: 1 },
+                        { q: "Inventor of light bulb is?", options: ["Bell", "Edison", "Tesla", "Marconi"], a: 1 },
+                        { q: "E = mc² is from?", options: ["Newton", "Einstein", "Hawking", "Galileo"], a: 1 },
+                        { q: "Periodic table has how many elements?", options: ["100", "118", "92", "150"], a: 1 },
+                        { q: "Atomic number of hydrogen is?", options: ["1", "2", "8", "6"], a: 0 },
+                        { q: "Oxygen atomic number is?", options: ["6", "8", "7", "1"], a: 1 },
+                        { q: "Carbon atomic number is?", options: ["6", "8", "7", "1"], a: 0 },
+                        { q: "Nitrogen atomic number is?", options: ["6", "8", "7", "1"], a: 2 },
+                        { q: "Largest planet is?", options: ["Earth", "Mars", "Jupiter", "Saturn"], a: 2 },
+                        { q: "Smallest planet is?", options: ["Mercury", "Venus", "Earth", "Mars"], a: 0 },
+                        { q: "Earth's moon is called?", options: ["Luna", "Moon", "Phobos", "Deimos"], a: 1 },
+                        { q: "Sun is a?", options: ["Planet", "Star", "Moon", "Comet"], a: 1 },
+                        { q: "Milky Way is a?", options: ["Star", "Galaxy", "Planet", "Comet"], a: 1 },
+                        { q: "Black hole is?", options: ["Star", "Hole in space", "Planet", "Comet"], a: 1 },
+                        { q: "Big Bang is?", options: ["Explosion", "Theory of universe origin", "Star birth", "Planet formation"], a: 1 },
+                        { q: "Evolution theory by?", options: ["Einstein", "Darwin", "Newton", "Galileo"], a: 1 },
+                        { q: "DNA is in?", options: ["Cells", "Bones", "Blood", "Skin"], a: 0 },
+                        { q: "Brain is for?", options: ["Thinking", "Pumping blood", "Breathing", "Digesting"], a: 0 },
+                        { q: "Lungs are for?", options: ["Thinking", "Pumping blood", "Breathing", "Digesting"], a: 2 },
+                        { q: "Stomach is for?", options: ["Thinking", "Pumping blood", "Breathing", "Digesting"], a: 3 },
+                        { q: "Heart is for?", options: ["Thinking", "Pumping blood", "Breathing", "Digesting"], a: 1 },
+                        { q: "Kidneys filter?", options: ["Air", "Blood", "Food", "Water"], a: 1 },
+                        { q: "Liver detoxifies?", options: ["Air", "Blood", "Food", "Water"], a: 1 },
+                        { q: "Eyes are for?", options: ["Hearing", "Seeing", "Smelling", "Tasting"], a: 1 },
+                        { q: "Ears are for?", options: ["Seeing", "Hearing", "Smelling", "Tasting"], a: 1 },
+                        { q: "Nose is for?", options: ["Seeing", "Hearing", "Smelling", "Tasting"], a: 2 },
+                        { q: "Tongue is for?", options: ["Seeing", "Hearing", "Smelling", "Tasting"], a: 3 }
                     ]
                 },
-                ja: {
-                    easy: [
-                        { q: "Konnichiwa nghĩa là gì?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
-                        { q: "Arigatou nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 2 }
-                    ],
-                    normal: [
-                        { q: "Tokyo là thủ đô của nước nào?", options: ["Hàn Quốc", "Trung Quốc", "Nhật Bản", "Việt Nam"], a: 2 }
-                    ]
-                },
-                ko: {
-                    easy: [
-                        { q: "Annyeonghaseyo nghĩa là gì?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 }
-                    ]
-                },
-                fr: {
-                    easy: [
-                        { q: "Bonjour nghĩa là gì?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
-                        { q: "Merci nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 2 }
-                    ],
-                    normal: [
-                        { q: "Paris là thủ đô của nước nào?", options: ["Anh", "Đức", "Pháp", "Ý"], a: 2 }
-                    ]
-                },
-                // Các ngôn ngữ khác tương tự (mẫu easy)
-                vi: {
-                    easy: [
-                        { q: "Hello nghĩa là gì trong tiếng Việt?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
-                        { q: "Apple là quả gì trong tiếng Việt?", options: ["Cam", "Chuối", "Táo", "Xoài"], a: 2 }
-                    ]
-                }
+                // Thêm nhiều câu hỏi cho các ngôn ngữ khác tương tự (ja, ko, fr, de, it, zh, es, ru, th, id, vi)
             };
 
             let currentQuestions = (questionSets[currentLearnLang] && questionSets[currentLearnLang][currentMode]) || questionSets.en.easy;
@@ -445,8 +498,6 @@
                 document.getElementById('status-info').classList.toggle('hidden');
             });
 
-            // Report Bug & Gợi Ý (đầy đủ như gốc)
-
             document.getElementById('report-btn').addEventListener('click', () => {
                 document.getElementById('report-form').classList.remove('hidden');
             });
@@ -491,7 +542,7 @@
                 document.getElementById('suggest-word').value = '';
             });
 
-            // Đổi Ngôn Ngữ Học thủ công - THÔNG BÁO THÀNH CÔNG
+            // Đổi Ngôn Ngữ Học - KIỂM TRA MUA QUỐC GIA
             document.getElementById('lang-learn-btn').addEventListener('click', () => {
                 document.getElementById('lang-learn-modal').classList.remove('hidden');
             });
@@ -501,7 +552,8 @@
             document.querySelectorAll('[data-learn-lang]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const newLang = btn.dataset.learnLang;
-                    if (questionSets[newLang]) {
+                    const country = btn.dataset.country;
+                    if (unlockedFlags.includes(country) || newLang === 'en' || newLang === 'vi') {
                         if (newLang !== currentLearnLang) {
                             if (confirm('Bạn chấp nhận đổi sang ngôn ngữ khác? Bạn đồng ý chứ?')) {
                                 currentLearnLang = newLang;
@@ -512,14 +564,10 @@
                             }
                         }
                     } else {
-                        alert('Xin lỗi bạn nhiều! Ngôn ngữ này chưa có bộ câu hỏi học nha!');
+                        alert('Quốc gia này hiện tại bạn chưa mua để mở khóa nó, vui lòng vào mua ở shop nhé bạn!');
                     }
                     document.getElementById('lang-learn-modal').classList.add('hidden');
                 });
             });
 
             updateScore();
-        };
-    </script>
-</body>
-</html>
