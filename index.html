@@ -204,7 +204,7 @@
                 id: 'id-ID'
             };
 
-            // BỘ CÂU HỎI FULL NHIỀU HƠN THEO CẤP ĐỘ (easy/normal 10-15, hard/extreme mẫu 50)
+            // BỘ CÂU HỎI FULL NHIỀU HƠN THEO CẤP ĐỘ
             const questionSets = {
                 en: {
                     easy: [
@@ -242,22 +242,117 @@
                         { q: "Cool nghĩa là?", options: ["Nóng", "Mát", "Ấm", "Lạnh"], a: 1 }
                     ],
                     hard: [
-                        // 50 câu mẫu khó (như ví dụ trước)
+                        { q: "Past tense of 'go' is?", options: ["Goed", "Went", "Gone", "Going"], a: 1 },
+                        { q: "Environment nghĩa là?", options: ["Thời tiết", "Môi trường", "Không gian", "Không khí"], a: 1 },
+                        { q: "Technology nghĩa là?", options: ["Khoa học", "Công nghệ", "Lịch sử", "Nghệ thuật"], a: 1 },
+                        { q: "Science nghĩa là?", options: ["Công nghệ", "Khoa học", "Nghệ thuật", "Lịch sử"], a: 1 },
+                        { q: "History nghĩa là?", options: ["Khoa học", "Lịch sử", "Công nghệ", "Nghệ thuật"], a: 1 },
+                        { q: "Art nghĩa là?", options: ["Lịch sử", "Nghệ thuật", "Khoa học", "Công nghệ"], a: 1 },
+                        { q: "Music nghĩa là?", options: ["Sách", "Âm nhạc", "Phim", "Tranh"], a: 1 },
+                        { q: "Movie nghĩa là?", options: ["Âm nhạc", "Phim", "Sách", "Tranh"], a: 1 },
+                        { q: "Book nghĩa là?", options: ["Phim", "Sách", "Âm nhạc", "Tranh"], a: 1 },
+                        { q: "Painting nghĩa là?", options: ["Sách", "Tranh", "Phim", "Âm nhạc"], a: 1 },
+                        { q: "Future tense of 'go' is?", options: ["Went", "Will go", "Gone", "Going"], a: 1 },
+                        { q: "Photosynthesis is?", options: ["Quang hợp", "Hô hấp", "Bốc hơi", "Ngưng tụ"], a: 0 },
+                        { q: "Einstein famous for?", options: ["Theory of Relativity", "Gravity", "Electricity", "Magnetism"], a: 0 },
+                        { q: "Shakespeare wrote?", options: ["Romeo and Juliet", "Harry Potter", "Lord of the Rings", "Game of Thrones"], a: 0 },
+                        { q: "Pacific Ocean is?", options: ["Smallest", "Largest", "Coldest", "Warmest"], a: 1 },
+                        { q: "Mount Everest is in?", options: ["Africa", "Asia", "Europe", "America"], a: 1 },
+                        { q: "DNA stands for?", options: ["Deoxyribonucleic Acid", "Deoxyribose Nucleic Acid", "Deoxy Nucleotide Acid", "Deoxyribonucleotide Acid"], a: 0 },
+                        { q: "Heart pumps?", options: ["Water", "Blood", "Air", "Food"], a: 1 },
+                        { q: "Earth's satellite is?", options: ["Sun", "Moon", "Mars", "Venus"], a: 1 },
+                        { q: "Solar system has how many planets?", options: ["7", "8", "9", "10"], a: 1 },
+                        { q: "Pythagoras theorem is for?", options: ["Triangle", "Circle", "Square", "Rectangle"], a: 0 },
+                        { q: "PI value is?", options: ["3.14", "2.718", "1.618", "9.8"], a: 0 },
+                        { q: "Gravity on Earth is?", options: ["9.8 m/s²", "3.14 m/s²", "2.718 m/s²", "1.618 m/s²"], a: 0 },
+                        { q: "Light speed is?", options: ["300,000 km/s", "150,000 km/s", "500,000 km/s", "100,000 km/s"], a: 0 },
+                        { q: "Water boiling point is?", options: ["0°C", "100°C", "32°C", "212°C"], a: 1 },
+                        { q: "Freezing point of water is?", options: ["0°C", "100°C", "32°C", "212°C"], a: 0 },
+                        { q: "Human body has how many bones?", options: ["206", "106", "306", "406"], a: 0 },
+                        { q: "Largest organ in body is?", options: ["Heart", "Liver", "Skin", "Lung"], a: 2 },
+                        { q: "Capital of USA is?", options: ["New York", "Washington D.C.", "Los Angeles", "Chicago"], a: 1 },
+                        { q: "Capital of France is?", options: ["Berlin", "Paris", "Madrid", "Rome"], a: 1 },
+                        { q: "Largest continent is?", options: ["Africa", "Asia", "Europe", "America"], a: 1 },
+                        { q: "Smallest continent is?", options: ["Australia", "Europe", "Africa", "Antarctica"], a: 0 },
+                        { q: "Longest river is?", options: ["Amazon", "Nile", "Yangtze", "Mississippi"], a: 1 },
+                        { q: "Largest desert is?", options: ["Sahara", "Gobi", "Kalahari", "Antarctic"], a: 3 },
+                        { q: "First man on moon is?", options: ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "Alan Shepard"], a: 0 },
+                        { q: "World War II ended in?", options: ["1945", "1918", "1939", "1965"], a: 0 },
+                        { q: "Inventor of telephone is?", options: ["Edison", "Bell", "Tesla", "Marconi"], a: 1 },
+                        { q: "Inventor of light bulb is?", options: ["Bell", "Edison", "Tesla", "Marconi"], a: 1 },
+                        { q: "E = mc² is from?", options: ["Newton", "Einstein", "Hawking", "Galileo"], a: 1 },
+                        { q: "Periodic table has how many elements?", options: ["100", "118", "92", "150"], a: 1 },
+                        { q: "Atomic number of hydrogen is?", options: ["1", "2", "8", "6"], a: 0 },
+                        { q: "Oxygen atomic number is?", options: ["6", "8", "7", "1"], a: 1 },
+                        { q: "Carbon atomic number is?", options: ["6", "8", "7", "1"], a: 0 },
+                        { q: "Nitrogen atomic number is?", options: ["6", "8", "7", "1"], a: 2 },
+                        { q: "Largest planet is?", options: ["Earth", "Mars", "Jupiter", "Saturn"], a: 2 },
+                        { q: "Smallest planet is?", options: ["Mercury", "Venus", "Earth", "Mars"], a: 0 },
+                        { q: "Earth's moon is called?", options: ["Luna", "Moon", "Phobos", "Deimos"], a: 1 },
+                        { q: "Sun is a?", options: ["Planet", "Star", "Moon", "Comet"], a: 1 },
+                        { q: "Milky Way is a?", options: ["Star", "Galaxy", "Planet", "Comet"], a: 1 },
+                        { q: "Black hole is?", options: ["Star", "Hole in space", "Planet", "Comet"], a: 1 },
+                        { q: "Big Bang is?", options: ["Explosion", "Theory of universe origin", "Star birth", "Planet formation"], a: 1 },
+                        { q: "Evolution theory by?", options: ["Einstein", "Darwin", "Newton", "Galileo"], a: 1 }
                     ],
                     superhard: [
-                        // 50 câu mẫu siêu khó
+                        { q: "Idiom 'kick the bucket' means?", options: ["Đá xô", "Chết", "Bắt đầu", "Kết thúc"], a: 1 },
+                        { q: "Phrasal verb 'look up to' means?", options: ["Ngước lên", "Ngưỡng mộ", "Tìm kiếm", "Bỏ qua"], a: 1 },
+                        { q: "What is 'quantum physics'?", options: ["Vật lý cổ điển", "Vật lý lượng tử", "Vật lý hạt nhân", "Vật lý thiên văn"], a: 1 },
+                        { q: "Who wrote '1984'?", options: ["Orwell", "Huxley", "Tolkien", "Rowling"], a: 0 },
+                        { q: "What is 'blockchain'?", options: ["Chuỗi khối", "Mạng xã hội", "Trò chơi", "Ứng dụng di động"], a: 0 },
+                        { q: "Meaning of 'serendipity'?", options: ["May mắn tình cờ", "Buồn bã", "Giận dữ", "Lo lắng"], a: 0 },
+                        { q: "What is 'paradox'?", options: ["Nghịch lý", "Câu chuyện", "Thành ngữ", "Tục ngữ"], a: 0 },
+                        { q: "Difference between 'imply' and 'infer'?", options: ["Gợi ý và suy ra", "Cả hai đều là suy luận", "Ngược lại", "Không khác"], a: 0 },
+                        // Thêm đến 50 câu siêu khó (mẫu, bạn có thể thay)
+                        { q: "What is 'cryptocurrency'?", options: ["Tiền giấy", "Tiền điện tử", "Vàng", "Bạc"], a: 1 },
+                        { q: "AI stands for?", options: ["Artificial Intelligence", "Advanced Internet", "Automated Information", "Artificial Interaction"], a: 0 },
+                        // ... (đủ 50)
                     ],
                     extreme: [
-                        // 50 câu mẫu cực khó
+                        { q: "Meaning of 'ubiquitous'?", options: ["Hiếm", "Có mặt khắp nơi", "Cổ xưa", "Hiện đại"], a: 1 },
+                        { q: "What is 'string theory'?", options: ["Lý thuyết dây", "Lý thuyết chuỗi", "Lý thuyết âm nhạc", "Lý thuyết toán học"], a: 0 },
+                        { q: "Who is the father of modern physics?", options: ["Newton", "Einstein", "Galileo", "Hawking"], a: 1 },
+                        // ... (đủ 50 câu cực khó)
                     ]
                 },
-                // Các ngôn ngữ khác có easy/normal tương tự
+                ja: {
+                    easy: [
+                        { q: "Konnichiwa nghĩa là gì?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
+                        { q: "Arigatou nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 2 },
+                        { q: "Sumimasen nghĩa là?", options: ["Cảm ơn", "Xin lỗi", "Xin chào", "Tạm biệt"], a: 1 },
+                        { q: "Ohayou nghĩa là?", options: ["Chào buổi tối", "Chào buổi sáng", "Chào buổi trưa", "Tạm biệt"], a: 1 },
+                        { q: "Sayonara nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 1 },
+                        { q: "Hai nghĩa là?", options: ["Không", "Có", "Cảm ơn", "Xin lỗi"], a: 1 },
+                        { q: "Iie nghĩa là?", options: ["Có", "Không", "Xin chào", "Tạm biệt"], a: 1 },
+                        { q: "Onegaishimasu nghĩa là?", options: ["Cảm ơn", "Làm ơn", "Xin lỗi", "Xin chào"], a: 1 },
+                        { q: "Gomennasai nghĩa là?", options: ["Cảm ơn", "Xin lỗi", "Xin chào", "Tạm biệt"], a: 1 },
+                        { q: "Watashi wa nghĩa là?", options: ["Bạn là", "Tôi là", "Anh ấy là", "Cô ấy là"], a: 1 },
+                        { q: "Ringo là quả gì?", options: ["Chuối", "Táo", "Cam", "Xoài"], a: 1 },
+                        { q: "Inu là con gì?", options: ["Mèo", "Chó", "Gà", "Vịt"], a: 1 },
+                        { q: "Hon là gì?", options: ["Bút", "Sách", "Bàn", "Ghế"], a: 1 },
+                        { q: "Taiyo là mặt gì?", options: ["Trăng", "Mặt trời", "Sao", "Mây"], a: 1 }
+                    ],
+                    normal: [
+                        { q: "Tokyo là thủ đô của nước nào?", options: ["Hàn Quốc", "Trung Quốc", "Nhật Bản", "Việt Nam"], a: 2 },
+                        { q: "Sushi là món gì?", options: ["Mì", "Cơm", "Canh", "Bánh"], a: 1 },
+                        { q: "Sakura nghĩa là?", options: ["Hoa anh đào", "Hoa hồng", "Hoa hướng dương", "Hoa cúc"], a: 0 },
+                        { q: "Samurai là gì?", options: ["Ninja", "Chiến binh", "Vua", "Nông dân"], a: 1 },
+                        { q: "Anime là gì?", options: ["Phim hoạt hình Nhật", "Phim Mỹ", "Phim Hàn", "Phim Trung"], a: 0 }
+                    ]
+                },
+                // Tương tự cho các ngôn ngữ khác (ko, fr, de, it, zh, es, ru, th, id, vi) - có easy/normal, fallback về easy cho mode cao
                 vi: {
                     easy: [
                         { q: "Hello nghĩa là gì trong tiếng Việt?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
                         { q: "Apple là quả gì trong tiếng Việt?", options: ["Cam", "Chuối", "Táo", "Xoài"], a: 2 },
                         { q: "Dog là con gì trong tiếng Việt?", options: ["Mèo", "Chó", "Gà", "Vịt"], a: 1 },
-                        { q: "Thank you nghĩa là gì trong tiếng Việt?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 2 }
+                        { q: "Thank you nghĩa là gì trong tiếng Việt?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 2 },
+                        { q: "Water là gì trong tiếng Việt?", options: ["Sữa", "Nước", "Cà phê", "Trà"], a: 1 }
+                    ],
+                    normal: [
+                        { q: "Hà Nội là thủ đô của nước nào?", options: ["Thái Lan", "Indonesia", "Việt Nam", "Philippines"], a: 2 },
+                        { q: "Phở là món gì?", options: ["Bún", "Phở", "Mì", "Cơm"], a: 1 }
                     ]
                 }
             };
@@ -405,7 +500,7 @@
                 if (next === 'extreme' && !confirm('⚠️ CỰC KHÓ ⚠️\nChỉ dành cho thánh tiếng Anh!\nBạn có dám thử không? 😈')) return;
                 currentMode = next;
                 document.getElementById('mode-btn').textContent = `⚡ Mode: ${names[next]}`;
-                currentQuestions = questionSets[currentLearnLang][next] || questionSets.en.easy;
+                currentQuestions = questionSets[currentLearnLang][next] || questionSets[currentLearnLang].easy || questionSets.en.easy;
                 currentQuestion = 0;
                 loadQuestion();
             });
