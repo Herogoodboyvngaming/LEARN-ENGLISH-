@@ -26,10 +26,10 @@
         <!-- Thông Tin hiện/ẩn -->
         <div id="status-info" class="info-box hidden">
             <h3>ℹ️ Thông Tin & Update</h3>
-            <p><strong>Phiên bản:</strong> Full + Ngôn Ngữ Học Qua Shop (05/01/2026)</p>
+            <p><strong>Phiên bản:</strong> Độ Khó Theo Ngôn Ngữ - Không Tự Đổi (05/01/2026)</p>
             <p><strong>Tác giả:</strong> Nguyễn Chí Dự 🇻🇳 (OWNER)</p>
             <p><strong>Gmail hỗ trợ:</strong> Herogoodboymc2024@gmail.com</p>
-            <p>Đổi ngôn ngữ học qua shop, thông báo thành công, tất cả nút chạy mượt!</p>
+            <p>Độ khó theo ngôn ngữ, mua shop không tự đổi, phải đổi thủ công!</p>
         </div>
 
         <!-- Màn hình Start -->
@@ -101,10 +101,10 @@
             <button data-learn-lang="ja">🇯🇵 Tiếng Nhật</button>
             <button data-learn-lang="ko">🇰🇷 Tiếng Hàn</button>
             <button data-learn-lang="fr">🇫🇷 Tiếng Pháp</button>
-            <button data-learn-lang="zh">🇨🇳 Tiếng Trung</button>
-            <button data-learn-lang="es">🇪🇸 Tiếng Tây Ban Nha</button>
             <button data-learn-lang="de">🇩🇪 Tiếng Đức</button>
             <button data-learn-lang="it">🇮🇹 Tiếng Ý</button>
+            <button data-learn-lang="zh">🇨🇳 Tiếng Trung</button>
+            <button data-learn-lang="es">🇪🇸 Tiếng Tây Ban Nha</button>
             <button data-learn-lang="ru">🇷🇺 Tiếng Nga</button>
             <button data-learn-lang="th">🇹🇭 Tiếng Thái</button>
             <button data-learn-lang="id">🇮🇩 Tiếng Indonesia</button>
@@ -163,7 +163,6 @@
             let score = 0;
             let currentQuestion = 0;
             let unlockedFlags = ['vn'];
-            let unlockedLearnLangs = ['en', 'vi']; // Mặc định mở Anh + Việt
 
             const modes = {
                 easy: { name: "Dễ", bonus: 10 },
@@ -205,6 +204,7 @@
                 id: 'id-ID'
             };
 
+            // FULL BỘ CÂU HỎI THEO NGÔN NGỮ VÀ ĐỘ KHÓ (mẫu)
             const questionSets = {
                 en: {
                     easy: [
@@ -212,23 +212,28 @@
                         { q: "Apple là quả gì?", options: ["Cam", "Chuối", "Táo", "Xoài"], a: 2 },
                         { q: "Dog là con gì?", options: ["Mèo", "Chó", "Gà", "Vịt"], a: 1 },
                         { q: "Thank you nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Làm ơn"], a: 2 },
-                        { q: "Water là gì?", options: ["Sữa", "Nước", "Cà phê", "Trà"], a: 1 },
-                        { q: "Book là gì?", options: ["Bút", "Sách", "Bàn", "Ghế"], a: 1 },
-                        { q: "Family nghĩa là?", options: ["Bạn bè", "Gia đình", "Trường học", "Công việc"], a: 1 },
-                        { q: "Happy nghĩa là?", options: ["Buồn", "Vui vẻ", "Giận", "Sợ"], a: 1 }
+                        { q: "Water là gì?", options: ["Sữa", "Nước", "Cà phê", "Trà"], a: 1 }
                     ],
                     normal: [
-                        { q: "Capital of France is?", options: ["London", "Berlin", "Paris", "Madrid"], a: 2 },
-                        { q: "Yesterday nghĩa là?", options: ["Hôm qua", "Hôm nay", "Ngày mai", "Tuần tới"], a: 0 }
+                        { q: "Capital of France is?", options: ["London", "Berlin", "Paris", "Madrid"], a: 2 }
                     ],
                     hard: [
                         { q: "Past tense of 'go' is?", options: ["Goed", "Went", "Gone", "Going"], a: 1 }
+                    ],
+                    superhard: [
+                        { q: "Difference between 'affect' and 'effect'?", options: ["Không khác", "Affect là động từ, effect là danh từ", "Ngược lại", "Cả hai đều là danh từ"], a: 1 }
+                    ],
+                    extreme: [
+                        { q: "Meaning of 'serendipity'?", options: ["May mắn tình cờ", "Buồn bã", "Giận dữ", "Lo lắng"], a: 0 }
                     ]
                 },
                 ja: {
                     easy: [
                         { q: "Konnichiwa nghĩa là gì?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
                         { q: "Arigatou nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 2 }
+                    ],
+                    normal: [
+                        { q: "Tokyo là thủ đô của nước nào?", options: ["Hàn Quốc", "Trung Quốc", "Nhật Bản", "Việt Nam"], a: 2 }
                     ]
                 },
                 ko: {
@@ -236,14 +241,25 @@
                         { q: "Annyeonghaseyo nghĩa là gì?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 }
                     ]
                 },
+                fr: {
+                    easy: [
+                        { q: "Bonjour nghĩa là gì?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
+                        { q: "Merci nghĩa là?", options: ["Xin chào", "Tạm biệt", "Cảm ơn", "Xin lỗi"], a: 2 }
+                    ],
+                    normal: [
+                        { q: "Paris là thủ đô của nước nào?", options: ["Anh", "Đức", "Pháp", "Ý"], a: 2 }
+                    ]
+                },
+                // Các ngôn ngữ khác tương tự (mẫu easy)
                 vi: {
                     easy: [
-                        { q: "Hello nghĩa là gì trong tiếng Việt?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 }
+                        { q: "Hello nghĩa là gì trong tiếng Việt?", options: ["Tạm biệt", "Xin chào", "Cảm ơn", "Xin lỗi"], a: 1 },
+                        { q: "Apple là quả gì trong tiếng Việt?", options: ["Cam", "Chuối", "Táo", "Xoài"], a: 2 }
                     ]
                 }
             };
 
-            let currentQuestions = questionSets[currentLearnLang]?.[currentMode] || questionSets.en.easy;
+            let currentQuestions = (questionSets[currentLearnLang] && questionSets[currentLearnLang][currentMode]) || questionSets.en.easy;
 
             function updateClock() {
                 const options = { timeZone: currentTimezone, hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -386,7 +402,7 @@
                 if (next === 'extreme' && !confirm('⚠️ CỰC KHÓ ⚠️\nChỉ dành cho thánh tiếng Anh!\nBạn có dám thử không? 😈')) return;
                 currentMode = next;
                 document.getElementById('mode-btn').textContent = `⚡ Mode: ${names[next]}`;
-                currentQuestions = questionSets[currentLearnLang]?.[next] || questionSets.en.easy;
+                currentQuestions = (questionSets[currentLearnLang] && questionSets[currentLearnLang][next]) || questionSets.en.easy;
                 currentQuestion = 0;
                 loadQuestion();
             });
@@ -406,23 +422,6 @@
                 item.addEventListener('click', () => {
                     const country = item.dataset.country;
                     const price = parseInt(item.dataset.price);
-                    const langMap = {
-                        vn: 'vi',
-                        us: 'en',
-                        gb: 'en',
-                        jp: 'ja',
-                        kr: 'ko',
-                        fr: 'fr',
-                        de: 'de',
-                        it: 'it',
-                        cn: 'zh',
-                        es: 'es',
-                        ru: 'ru',
-                        th: 'th',
-                        id: 'id'
-                    };
-                    const learnLang = langMap[country] || 'en';
-
                     if (unlockedFlags.includes(country)) {
                         currentTimezone = timezones[country] || timezones.vn;
                         updateClock();
@@ -431,18 +430,10 @@
                         if (confirm(`Mua quốc kỳ ${country.toUpperCase()} với ${price} điểm?`)) {
                             score -= price;
                             unlockedFlags.push(country);
-                            if (!unlockedLearnLangs.includes(learnLang)) {
-                                unlockedLearnLangs.push(learnLang);
-                            }
-                            currentLearnLang = learnLang;
-                            currentLang = learnLang;
-                            currentQuestions = questionSets[currentLearnLang]?.[currentMode] || questionSets.en.easy;
+                            updateScore();
                             currentTimezone = timezones[country] || timezones.vn;
                             updateClock();
-                            updateScore();
-                            alert('Mua thành công! Đã mở khóa và đổi sang ngôn ngữ học mới! 🎉');
-                            currentQuestion = 0;
-                            loadQuestion();
+                            alert('Mua thành công! Bạn có thể vào Đổi Ngôn Ngữ Học để chọn ngôn ngữ mới nha! 🎉');
                         }
                     } else {
                         alert('Không đủ điểm nha!');
@@ -453,6 +444,8 @@
             document.getElementById('status-btn').addEventListener('click', () => {
                 document.getElementById('status-info').classList.toggle('hidden');
             });
+
+            // Report Bug & Gợi Ý (đầy đủ như gốc)
 
             document.getElementById('report-btn').addEventListener('click', () => {
                 document.getElementById('report-form').classList.remove('hidden');
@@ -498,7 +491,7 @@
                 document.getElementById('suggest-word').value = '';
             });
 
-            // Đổi Ngôn Ngữ Học
+            // Đổi Ngôn Ngữ Học thủ công - THÔNG BÁO THÀNH CÔNG
             document.getElementById('lang-learn-btn').addEventListener('click', () => {
                 document.getElementById('lang-learn-modal').classList.remove('hidden');
             });
@@ -508,18 +501,18 @@
             document.querySelectorAll('[data-learn-lang]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const newLang = btn.dataset.learnLang;
-                    if (unlockedLearnLangs.includes(newLang)) {
+                    if (questionSets[newLang]) {
                         if (newLang !== currentLearnLang) {
                             if (confirm('Bạn chấp nhận đổi sang ngôn ngữ khác? Bạn đồng ý chứ?')) {
                                 currentLearnLang = newLang;
-                                currentQuestions = questionSets[currentLearnLang]?.[currentMode] || questionSets.en.easy;
-                                alert('Đã chọn ngôn ngữ học thành công!');
+                                currentQuestions = questionSets[currentLearnLang][currentMode] || questionSets.en.easy;
                                 currentQuestion = 0;
                                 loadQuestion();
+                                alert('Đã đổi ngôn ngữ học thành công!');
                             }
                         }
                     } else {
-                        alert('Xin lỗi bạn nhiều! Bạn vẫn chưa mở khóa ngôn ngữ này. Vui lòng cày điểm và vào shop mở khóa nha! ❤️');
+                        alert('Xin lỗi bạn nhiều! Ngôn ngữ này chưa có bộ câu hỏi học nha!');
                     }
                     document.getElementById('lang-learn-modal').classList.add('hidden');
                 });
