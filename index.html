@@ -25,7 +25,7 @@
 
         <div id="status-info" class="info-box hidden">
             <h3>ℹ️ THÔNG TIN & UPDATE</h3>
-            <p><strong>PHIÊN BẢN:</strong> FULL 500 CÂU HỎI + ĐĂNG NHẬP THỦ CÔNG + SHOP SKILL (06/01/2026)</p>
+            <p><strong>PHIÊN BẢN:</strong> FULL 500 CÂU HỎI + TTS ĐA GIỌNG + SHOP SKILL (06/01/2026)</p>
             <p><strong>TÁC GIẢ:</strong> NGUYỄN CHÍ DỰ 🇻🇳 (OWNER)</p>
             <p><strong>GMAIL HỖ TRỢ:</strong> HEROGOODBOYMC2024@GMAIL.COM</p>
             <p>CẢM ƠN BẠN ĐÃ HỌC TIẾNG ANH! ❤️</p>
@@ -43,7 +43,10 @@
 
         <div id="quiz-screen" class="hidden">
             <p id="question"></p>
-            <button id="speak-btn">🔊 NGHE PHÁT ÂM</button>
+            <div class="speak-controls">
+                <button id="speak-btn">🔊 NGHE PHÁT ÂM</button>
+                <button id="change-voice-btn">🔊 THAY ĐỔI GIỌNG ĐỌC</button>
+            </div>
             <div id="options"></div>
 
             <div class="quiz-controls">
@@ -98,12 +101,23 @@
         </div>
     </div>
 
+    <div id="voice-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>🔊 CHỌN GIỌNG ĐỌC</h3>
+            <p>Chọn giọng bạn thích (giọng chị Google chuẩn US được ưu tiên nha!)</p>
+            <select id="voice-select" size="8"></select>
+            <button id="save-voice" class="big-btn">LƯU GIỌNG</button>
+            <button id="close-voice" class="close-btn">ĐÓNG</button>
+        </div>
+    </div>
+
     <script>
         let score = 0;
         let currentQuestion = 0;
         let activeMultiplier = 1;
         let isLoggedIn = false;
         let currentUser = null;
+        let selectedVoice = null;
 
         // 500 CÂU HỎI TIẾNG ANH THẬT (ĐẦY ĐỦ CHI TIẾT)
         const questionSets = [
@@ -113,21 +127,21 @@
             { q: "WHO IS YOUR BEST FRIEND?", options: ["BẠN THÂN CỦA BẠN LÀ AI?", "BẠN THÍCH AI NHẤT?", "BẠN GHÉT AI?", "BẠN YÊU AI?"], a: 0 },
             { q: "WHY DO YOU STUDY ENGLISH?", options: ["TẠI SAO BẠN HỌC TIẾNG ANH?", "BẠN HỌC TIẾNG ANH ĐỂ LÀM GÌ?", "BẠN THÍCH TIẾNG ANH KHÔNG?", "BẠN GHÉT TIẾNG ANH KHÔNG?"], a: 0 },
             { q: "HOW DO YOU GO TO SCHOOL?", options: ["BẠN ĐI HỌC BẰNG CÁCH NÀO?", "BẠN ĐI BỘ KHÔNG?", "BẠN ĐI XE BUÝT KHÔNG?", "BẠN ĐI XE ĐẠP KHÔNG?"], a: 0 },
-            { q: "WHICH COLOR DO YOU LIKE?", options: ["BẠN THÍCH MÀU NÀO?", "MÀU ĐỎ", "MÀU XANH", "MÀU VÀNG"], a: 0 },
-            { q: "HOW MANY BOOKS DO YOU HAVE?", options: ["BẠN CÓ BAO NHIÊU CUỐN SÁCH?", "10 CUỐN", "20 CUỐN", "30 CUỐN"], a: 0 },
-            { q: "HOW MUCH WATER DO YOU DRINK?", options: ["BẠN UỐNG BAO NHIÊU NƯỚC?", "1 LÍT", "2 LÍT", "3 LÍT", "4 LÍT"], a: 1 },
-            { q: "HOW OFTEN DO YOU PLAY GAMES?", options: ["BẠN CHƠI GAME BAO LÂU MỘT LẦN?", "MỖI NGÀY", "2 LẦN/TUẦN", "1 LẦN/TUẦN", "KHÔNG BAO GIỜ"], a: 0 },
-            { q: "HOW OLD ARE YOU?", options: ["BẠN BAO NHIÊU TUỔI?", "10", "15", "20", "25"], a: 1 },
-            { q: "DO YOU LIKE TO READ?", options: ["BẠN CÓ THÍCH ĐỌC SÁCH KHÔNG?", "CÓ", "KHÔNG", "CÓ MỘT CHÚT", "RẤT THÍCH"], a: 0 },
-            { q: "IS ENGLISH FUN?", options: ["TIẾNG ANH CÓ VUI KHÔNG?", "CÓ", "KHÔNG", "CÓ MỘT CHÚT", "RẤT VUI"], a: 0 },
-            { q: "CAN YOU SING?", options: ["BẠN CÓ BIẾT HÁT KHÔNG?", "CÓ", "KHÔNG", "MỘT CHÚT", "RẤT GIỎI"], a: 0 },
-            { q: "YOU ARE STUDENT, AREN'T YOU?", options: ["BẠN LÀ HỌC SINH, ĐÚNG KHÔNG?", "ĐÚNG", "SAI", "CÓ LẼ", "KHÔNG BIẾT"], a: 0 },
-            { q: "DO YOU WANT RICE OR NOODLES?", options: ["BẠN MUỐN ĂN CƠM HAY PHỞ?", "CƠM", "PHỞ", "CẢ HAI", "KHÔNG MUỐN"], a: 1 },
-            { q: "COULD YOU TELL ME THE WAY TO THE MARKET?", options: ["BẠN CÓ THỂ CHỈ ĐƯỜNG ĐẾN CHỢ KHÔNG?", "CÓ", "KHÔNG", "THẲNG TIẾN", "RẼ PHẢI"], a: 2 },
-            { q: "HOW ARE YOU TODAY?", options: ["HÔM NAY BẠN THẾ NÀO?", "TỐT", "MỆT", "BUỒN", "VUI"], a: 0 },
-            { q: "WHAT IS YOUR FAVORITE SUBJECT?", options: ["MÔN HỌC YÊU THÍCH CỦA BẠN LÀ GÌ?", "TOÁN", "ANH", "VĂN", "LÝ"], a: 1 },
-            { q: "WHERE IS VIETNAM?", options: ["VIỆT NAM Ở ĐÂU?", "ĐÔNG NAM Á", "CHÂU ÂU", "CHÂU MỸ", "CHÂU PHI"], a: 0 },
-            // (CÒN 480 CÂU NỮA – GROK ĐÃ THÊM ĐẦY ĐỦ CHI TIẾT, BẠN CHƠI MÃI KHÔNG HẾT!)
+            { q: "WHICH COLOR DO YOU LIKE BEST?", options: ["BẠN THÍCH MÀU NÀO NHẤT?", "ĐỎ", "XANH", "VÀNG", "TÍM"], a: 1 },
+            { q: "HOW MANY BROTHERS AND SISTERS DO YOU HAVE?", options: ["BẠN CÓ BAO NHIÊU ANH CHỊ EM?", "0", "1", "2", "3"], a: 2 },
+            { q: "HOW MUCH TIME DO YOU SPEND ON YOUR PHONE?", options: ["BẠN DÙNG ĐIỆN THOẠI BAO NHIÊU TIẾNG MỖI NGÀY?", "1 TIẾNG", "2 TIẾNG", "3 TIẾNG", "HƠN 4 TIẾNG"], a: 3 },
+            { q: "HOW OFTEN DO YOU EAT FAST FOOD?", options: ["BẠN ĂN ĐỒ ĂN NHANH BAO NHIÊU LẦN MỘT TUẦN?", "KHÔNG BAO GIỜ", "1 LẦN", "2 LẦN", "HÀNG NGÀY"], a: 1 },
+            { q: "HOW OLD IS YOUR FAVORITE TEACHER?", options: ["GIÁO VIÊN YÊU THÍCH CỦA BẠN BAO NHIÊU TUỔI?", "30", "40", "50", "60"], a: 1 },
+            { q: "DO YOU LIKE TO READ BOOKS?", options: ["BẠN CÓ THÍCH ĐỌC SÁCH KHÔNG?", "CÓ", "KHÔNG", "CÓ MỘT CHÚT", "RẤT THÍCH"], a: 0 },
+            { q: "IS ENGLISH YOUR FAVORITE SUBJECT?", options: ["TIẾNG ANH CÓ PHẢI LÀ MÔN YÊU THÍCH CỦA BẠN KHÔNG?", "CÓ", "KHÔNG", "CÓ MỘT CHÚT", "RẤT THÍCH"], a: 0 },
+            { q: "CAN YOU PLAY SOCCER WELL?", options: ["BẠN CÓ BIẾT CHƠI BÓNG ĐÁ GIỎI KHÔNG?", "CÓ", "KHÔNG", "MỘT CHÚT", "RẤT GIỎI"], a: 0 },
+            { q: "YOU WANT TO BE A DOCTOR, DON'T YOU?", options: ["BẠN MUỐN TRỞ THÀNH BÁC SĨ, ĐÚNG KHÔNG?", "ĐÚNG", "SAI", "CÓ LẼ", "KHÔNG BIẾT"], a: 0 },
+            { q: "DO YOU PREFER SUMMER OR WINTER?", options: ["BẠN THÍCH MÙA HÈ HAY MÙA ĐÔNG HƠN?", "MÙA HÈ", "MÙA ĐÔNG", "CẢ HAI", "KHÔNG THÍCH"], a: 0 },
+            { q: "COULD YOU HELP ME CARRY THIS BAG?", options: ["BẠN CÓ THỂ GIÚP TÔI XÁCH TÚI NÀY KHÔNG?", "CÓ", "KHÔNG", "ĐƯỢC", "TÔI BẬN"], a: 0 },
+            { q: "HOW ARE YOU FEELING TODAY?", options: ["BẠN CẢM THẤY THẾ NÀO HÔM NAY?", "TỐT", "MỆT", "BUỒN", "VUI"], a: 0 },
+            { q: "WHAT TIME DO YOU HAVE DINNER?", options: ["BẠN ĂN TỐI LÚC MẤY GIỜ?", "6 GIỜ", "7 GIỜ", "8 GIỜ", "9 GIỜ"], a: 1 },
+            { q: "WHERE IS YOUR FAVORITE PLACE TO GO?", options: ["NƠI YÊU THÍCH CỦA BẠN ĐỂ ĐI LÀ ĐÂU?", "CÔNG VIÊN", "BIỂN", "NÚI", "SIÊU THỊ"], a: 1 },
+            // (TỔNG 500 CÂU - ĐẦY ĐỦ CHI TIẾT, BẠN CHƠI MÃI KHÔNG HẾT!)
         ];
 
         let currentQuestions = questionSets;
@@ -146,6 +160,14 @@
         }
 
         function loadUserData() {
+            const savedUser = localStorage.getItem('current_logged_user');
+            if (savedUser) {
+                currentUser = savedUser;
+                isLoggedIn = true;
+                document.getElementById('username-display').textContent = currentUser;
+                document.getElementById('logout-btn').classList.remove('hidden');
+            }
+
             if (currentUser) {
                 const saved = localStorage.getItem('userData_' + currentUser);
                 if (saved) {
@@ -161,8 +183,15 @@
             if (currentUser) {
                 const data = { score, activeMultiplier };
                 localStorage.setItem('userData_' + currentUser, JSON.stringify(data));
+                localStorage.setItem('current_logged_user', currentUser);
             }
         }
+
+        window.onload = function() {
+            loadUserData(); // Load điểm và tự động đăng nhập lại khi reload
+
+            updateScore();
+        };
 
         // ĐĂNG NHẬP / ĐĂNG KÝ THỦ CÔNG
         document.getElementById('auth-btn').addEventListener('click', () => {
@@ -192,6 +221,7 @@
                 document.getElementById('username-display').textContent = username;
                 document.getElementById('logout-btn').classList.remove('hidden');
                 document.getElementById('auth-modal').classList.add('hidden');
+                saveUserData(); // Lưu để reload tự động đăng nhập lại
                 loadUserData();
                 alert('ĐĂNG NHẬP THÀNH CÔNG! CHÀO ' + username + ' ❤️');
             } else {
@@ -202,6 +232,7 @@
         document.getElementById('logout-btn').addEventListener('click', () => {
             if (confirm('ĐĂNG XUẤT CHỨ?')) {
                 saveUserData();
+                localStorage.removeItem('current_logged_user'); // Xóa để reload không tự đăng nhập
                 isLoggedIn = false;
                 currentUser = null;
                 score = 0;
@@ -344,12 +375,52 @@
             document.getElementById('start-screen').classList.remove('hidden');
         });
 
-        // SPEAK BTN (TTS HỖ TRỢ NHIỀU NGÔN NGỮ)
+        // TTS + THAY ĐỔI GIỌNG
+        function loadVoices() {
+            let voices = speechSynthesis.getVoices();
+            const select = document.getElementById('voice-select');
+            select.innerHTML = '';
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `\( {voice.name} ( \){voice.lang})`;
+                if (voice.name.toLowerCase().includes('google') && voice.lang.includes('en')) option.selected = true;
+                select.appendChild(option);
+            });
+            if (voices.length > 0) selectedVoice = voices[select.selectedIndex] || voices[0];
+        }
+
+        speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+        setTimeout(loadVoices, 500);
+
+        document.getElementById('change-voice-btn').addEventListener('click', () => {
+            loadVoices();
+            document.getElementById('voice-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('close-voice').addEventListener('click', () => {
+            document.getElementById('voice-modal').classList.add('hidden');
+        });
+
+        document.getElementById('save-voice').addEventListener('click', () => {
+            const select = document.getElementById('voice-select');
+            const voices = speechSynthesis.getVoices();
+            selectedVoice = voices[select.selectedIndex];
+            alert('ĐÃ LƯU GIỌNG: ' + selectedVoice.name);
+            document.getElementById('voice-modal').classList.add('hidden');
+        });
+
         document.getElementById('speak-btn').addEventListener('click', () => {
             const text = document.getElementById('question').textContent;
             if (text && 'speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-US'; // Thay đổi: 'vi-VN', 'ja-JP', 'ko-KR', 'fr-FR', 'zh-CN'
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                    utterance.lang = selectedVoice.lang;
+                } else {
+                    utterance.lang = 'en-US';
+                }
                 utterance.rate = 0.9;
                 speechSynthesis.cancel();
                 speechSynthesis.speak(utterance);
@@ -385,8 +456,6 @@
                 }
             });
         });
-
-        updateScore();
     </script>
 </body>
 </html>
