@@ -1,6 +1,6 @@
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #e0f7fa, #c7f9e8); /* Pastel xanh lá + xanh dương dịu mắt */
+    background: linear-gradient(135deg, #e0f2fe, #c0e9e6); /* Pastel xanh dịu mắt, đồng đều */
     margin: 0;
     padding: 20px 0;
     min-height: 100vh;
@@ -12,14 +12,13 @@ body {
 
 .container {
     width: 100%;
-    max-width: 480px; /* Rộng vừa đẹp trên mobile và PC */
+    max-width: 480px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.85); /* Mờ nhẹ đồng đều, không dùng blur nặng */
     border-radius: 40px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 header {
@@ -27,14 +26,60 @@ header {
     color: white;
     text-align: center;
     padding: 40px 20px;
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
 }
 
 header h1 {
     margin: 0;
     font-size: 32px;
     font-weight: 700;
+}
+
+.clock, .user-info, .subtitle {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+button {
+    padding: 16px 32px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(45deg, #22d3ee, #0ea5e9);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
+}
+
+button:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(14, 165, 233, 0.4);
+}
+
+.big-btn {
+    padding: 20px 50px;
+    font-size: 24px;
+    background: linear-gradient(45deg, #fde68a, #fbbf24);
+    color: #0f172a;
+}
+
+.welcome-box {
+    text-align: center;
+    padding: 70px 40px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 40px;
+    margin: 40px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
 #question {
@@ -56,7 +101,6 @@ header h1 {
     padding: 16px 35px;
     font-size: 20px;
     border-radius: 50px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 #change-voice-btn {
@@ -66,14 +110,14 @@ header h1 {
 #options {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 30px;
     padding: 0 50px;
 }
 
 .option-btn {
     padding: 35px;
     font-size: 26px;
-    background: rgba(255, 255, 255, 0.9);
+    background: white;
     color: #0f172a;
     border-radius: 35px;
     border: none;
@@ -85,7 +129,6 @@ header h1 {
 
 .option-btn:hover {
     transform: translateY(-10px);
-    background: white;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
 }
 
@@ -101,7 +144,6 @@ header h1 {
     padding: 18px;
     font-size: 19px;
     border-radius: 50px;
-    box-shadow: 0 10px 30px rgba(249, 115, 22, 0.3);
 }
 
 #result {
@@ -123,7 +165,7 @@ header h1 {
 .shop-items {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 30px;
     padding: 40px;
 }
 
@@ -147,12 +189,10 @@ footer {
     padding: 40px;
     color: white;
     text-align: center;
-    border-top-left-radius: 40px;
-    border-top-right-radius: 40px;
 }
 
 .modal-content {
-    background: rgba(255, 255, 255, 0.95);
+    background: white;
     padding: 50px;
     border-radius: 40px;
     text-align: center;
@@ -164,7 +204,7 @@ footer {
     padding: 20px;
     margin: 30px 0;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.8);
+    background: #f0fdfa;
     border: 1px solid #86efac;
     font-size: 20px;
 }
