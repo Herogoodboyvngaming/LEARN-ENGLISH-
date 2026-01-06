@@ -28,7 +28,7 @@
 
         <DIV ID="STATUS-INFO" CLASS="INFO-BOX HIDDEN">
             <H3>ℹ️ THÔNG TIN & UPDATE</H3>
-            <P><STRONG>PHIÊN BẢN:</STRONG> FULL 500+ CÂU HỎI TIẾNG ANH + GOOGLE/FACEBOOK LOGIN + REPORT BUG (06/01/2026)</P>
+            <P><STRONG>PHIÊN BẢN:</STRONG> FULL 500+ CÂU HỎI + GOOGLE/FACEBOOK LOGIN + REPORT BUG (06/01/2026)</P>
             <P><STRONG>TÁC GIẢ:</STRONG> NGUYỄN CHÍ DỰ 🇻🇳 (OWNER)</P>
             <P><STRONG>GMAIL HỖ TRỢ:</STRONG> HEROGOODBOYMC2024@GMAIL.COM</P>
             <P>CẢM ƠN BẠN ĐÃ HỌC, CHÚC BẠN HỌC TIẾNG ANH THẬT GIỎI! ❤️</P>
@@ -164,7 +164,7 @@
                 { Q: "WHAT DO YOU DO?", OPTIONS: ["BẠN LÀM NGHỀ GÌ?", "BẠN HỌC GÌ?", "BẠN ĂN GÌ?", "BẠN CHƠI GÌ?"], A: 0 },
                 { Q: "WHAT ARE YOUR HOBBIES?", OPTIONS: ["SỞ THÍCH CỦA BẠN LÀ GÌ?", "BẠN THÍCH ĂN GÌ?", "BẠN THÍCH XEM GÌ?", "BẠN THÍCH NGHE GÌ?"], A: 0 },
                 { Q: "CAN I HELP YOU?", OPTIONS: ["TÔI CÓ THỂ GIÚP GÌ CHO BẠN?", "BẠN CÓ THỂ GIÚP TÔI KHÔNG?", "BẠN MUỐN GÌ?", "BẠN CẦN GÌ?"], A: 0 },
-                // (TỔNG HƠN 500 CÂU - ĐẦY ĐỦ CHI TIẾT VỀ MỌI LOẠI CÂU HỎI)
+                // (TỔNG HƠN 500 CÂU - ĐẦY ĐỦ CHI TIẾT)
             ];
 
             LET CURRENTQUESTIONS = QUESTIONSETS;
@@ -177,8 +177,7 @@
             UPDATECLOCK();
 
             FUNCTION UPDATESCORE() {
-                CONST ELEMENTS = DOCUMENT.QUERYSELECTORALL('#SCORE, #CURRENT-SCORE, #SHOP-SCORE');
-                ELEMENTS.FOREACH(EL => EL.TEXTCONTENT = SCORE);
+                DOCUMENT.QUERYSELECTORALL('#SCORE, #CURRENT-SCORE, #SHOP-SCORE').FOREACH(EL => EL.TEXTCONTENT = SCORE);
                 DOCUMENT.GETELEMENTBYID('ACTIVE-SKILL').TEXTCONTENT = ACTIVEMULTIPLIER > 1 ? 'X' + ACTIVEMULTIPLIER : 'KHÔNG CÓ';
                 SAVEUSERDATA();
             }
@@ -241,12 +240,10 @@
                     DOCUMENT.GETELEMENTBYID('AUTH-MODAL').CLASSLIST.REMOVE('HIDDEN');
                     RETURN;
                 }
-                IF (CONFIRM('BẠN ĐÃ SẴN SÀNG HỌC CHƯA? 💪')) {
-                    DOCUMENT.GETELEMENTBYID('START-SCREEN').CLASSLIST.ADD('HIDDEN');
-                    DOCUMENT.GETELEMENTBYID('QUIZ-SCREEN').CLASSLIST.REMOVE('HIDDEN');
-                    CURRENTQUESTION = 0;
-                    LOADQUESTION();
-                }
+                DOCUMENT.GETELEMENTBYID('START-SCREEN').CLASSLIST.ADD('HIDDEN');
+                DOCUMENT.GETELEMENTBYID('QUIZ-SCREEN').CLASSLIST.REMOVE('HIDDEN');
+                CURRENTQUESTION = 0;
+                LOADQUESTION();
             });
 
             FUNCTION LOADQUESTION() {
@@ -381,8 +378,13 @@
                 });
             });
 
+            // THÔNG TIN & UPDATE
+            DOCUMENT.GETELEMENTBYID('STATUS-BTN').ADDEVENTLISTENER('CLICK', () => {
+                DOCUMENT.GETELEMENTBYID('STATUS-INFO').CLASSLIST.TOGGLE('HIDDEN');
+            });
+
             UPDATESCORE();
         };
     </SCRIPT>
 </BODY>
-    </HTML>
+</HTML>
