@@ -232,7 +232,7 @@
         document.getElementById('logout-btn').addEventListener('click', () => {
             if (confirm('ĐĂNG XUẤT CHỨ?')) {
                 saveUserData();
-                localStorage.removeItem('current_logged_user'); // Xóa để reload không tự đăng nhập
+                localStorage.removeItem('current_logged_user');
                 isLoggedIn = false;
                 currentUser = null;
                 score = 0;
@@ -375,7 +375,7 @@
             document.getElementById('start-screen').classList.remove('hidden');
         });
 
-        // TTS + THAY ĐỔI GIỌNG
+        // TTS + THAY ĐỔI GIỌNG (SỬA LỖI HIỂN THỊ TÊN GIỌNG)
         function loadVoices() {
             let voices = speechSynthesis.getVoices();
             const select = document.getElementById('voice-select');
@@ -383,7 +383,7 @@
             voices.forEach((voice, i) => {
                 const option = document.createElement('option');
                 option.value = i;
-                option.textContent = `\( {voice.name} ( \){voice.lang})`;
+                option.textContent = voice.name + ' (' + voice.lang + ')'; // SỬA LỖI Ở ĐÂY
                 if (voice.name.toLowerCase().includes('google') && voice.lang.includes('en')) option.selected = true;
                 select.appendChild(option);
             });
@@ -456,6 +456,8 @@
                 }
             });
         });
+
+        updateScore();
     </script>
 </body>
 </html>
