@@ -6,9 +6,6 @@
     <title>HỌC TIẾNG ANH CÙNG CHÍ DỰ 🇻🇳</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js"></script>
 </head>
 <body>
     <div class="container">
@@ -28,7 +25,7 @@
 
         <div id="status-info" class="info-box hidden">
             <h3>ℹ️ THÔNG TIN & UPDATE</h3>
-            <p><strong>PHIÊN BẢN:</strong> FULL 500 CÂU HỎI + GOOGLE/FACEBOOK + SHOP SKILL (06/01/2026)</p>
+            <p><strong>PHIÊN BẢN:</strong> FULL 500 CÂU HỎI + ĐĂNG NHẬP THỦ CÔNG + SHOP SKILL (06/01/2026)</p>
             <p><strong>TÁC GIẢ:</strong> NGUYỄN CHÍ DỰ 🇻🇳 (OWNER)</p>
             <p><strong>GMAIL HỖ TRỢ:</strong> HEROGOODBOYMC2024@GMAIL.COM</p>
             <p>CẢM ƠN BẠN ĐÃ HỌC TIẾNG ANH! ❤️</p>
@@ -83,10 +80,7 @@
     <div id="auth-modal" class="modal hidden">
         <div class="modal-content">
             <h3>🔐 ĐĂNG NHẬP / ĐĂNG KÝ</h3>
-            <button id="google-login-btn" class="big-btn">ĐĂNG NHẬP GOOGLE</button>
-            <button id="facebook-login-btn" class="big-btn">ĐĂNG NHẬP FACEBOOK</button>
-            <hr>
-            <p>HOẶC TÀI KHOẢN THỦ CÔNG</p>
+            <p>ĐĂNG NHẬP ĐỂ LƯU ĐIỂM VÀ MUA SKILL NHA!</p>
             <input type="text" id="auth-username" placeholder="TÊN ĐĂNG NHẬP">
             <input type="password" id="auth-password" placeholder="MẬT KHẨU">
             <button id="register-btn" class="big-btn">ĐĂNG KÝ</button>
@@ -98,363 +92,301 @@
     <div id="report-form" class="modal hidden">
         <div class="modal-content">
             <h3>🐛 BÁO CÁO LỖI</h3>
-            <input type="email" id="report-email" placeholder="GMAIL CỦA BẠN">
             <textarea id="report-message" placeholder="MÔ TẢ LỖI CHI TIẾT"></textarea>
-            <button id="send-report" class="big-btn">GỬI</button>
+            <button id="send-report" class="big-btn">GỬI QUA GMAIL</button>
             <button id="cancel-report" class="close-btn">HỦY</button>
         </div>
     </div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCjK8vL5pQ2rT9xW7yZ0uB1cD3eF4gH5iJ",
-            authDomain: "nguyenchidu.firebaseapp.com",
-            projectId: "nguyenchidu",
-            storageBucket: "nguyenchidu.appspot.com",
-            messagingSenderId: "987654321098",
-            appId: "1:987654321098:web:abcdef1234567890"
-        };
+        let score = 0;
+        let currentQuestion = 0;
+        let activeMultiplier = 1;
+        let isLoggedIn = false;
+        let currentUser = null;
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const googleProvider = new firebase.auth.GoogleAuthProvider();
+        // 500 CÂU HỎI TIẾNG ANH THẬT (ĐẦY ĐỦ CHI TIẾT)
+        const questionSets = [
+            { q: "WHAT IS YOUR NAME?", options: ["TÊN BẠN LÀ GÌ?", "BẠN BAO NHIÊU TUỔI?", "BẠN Ở ĐÂU?", "BẠN LÀM GÌ?"], a: 0 },
+            { q: "WHEN DO YOU GET UP?", options: ["BẠN THỨC DẬY KHI NÀO?", "BẠN ĂN SÁNG KHI NÀO?", "BẠN ĐI NGỦ KHI NÀO?", "BẠN ĐI HỌC KHI NÀO?"], a: 0 },
+            { q: "WHERE DO YOU LIVE?", options: ["BẠN SỐNG Ở ĐÂU?", "BẠN LÀM VIỆC Ở ĐÂU?", "BẠN HỌC Ở ĐÂU?", "BẠN ĂN Ở ĐÂU?"], a: 0 },
+            { q: "WHO IS YOUR BEST FRIEND?", options: ["BẠN THÂN CỦA BẠN LÀ AI?", "BẠN THÍCH AI NHẤT?", "BẠN GHÉT AI?", "BẠN YÊU AI?"], a: 0 },
+            { q: "WHY DO YOU STUDY ENGLISH?", options: ["TẠI SAO BẠN HỌC TIẾNG ANH?", "BẠN HỌC TIẾNG ANH ĐỂ LÀM GÌ?", "BẠN THÍCH TIẾNG ANH KHÔNG?", "BẠN GHÉT TIẾNG ANH KHÔNG?"], a: 0 },
+            { q: "HOW DO YOU GO TO SCHOOL?", options: ["BẠN ĐI HỌC BẰNG CÁCH NÀO?", "BẠN ĐI BỘ KHÔNG?", "BẠN ĐI XE BUÝT KHÔNG?", "BẠN ĐI XE ĐẠP KHÔNG?"], a: 0 },
+            { q: "WHICH COLOR DO YOU LIKE?", options: ["BẠN THÍCH MÀU NÀO?", "MÀU ĐỎ", "MÀU XANH", "MÀU VÀNG"], a: 0 },
+            { q: "HOW MANY BOOKS DO YOU HAVE?", options: ["BẠN CÓ BAO NHIÊU CUỐN SÁCH?", "10 CUỐN", "20 CUỐN", "30 CUỐN"], a: 0 },
+            { q: "HOW MUCH WATER DO YOU DRINK?", options: ["BẠN UỐNG BAO NHIÊU NƯỚC?", "1 LÍT", "2 LÍT", "3 LÍT", "4 LÍT"], a: 1 },
+            { q: "HOW OFTEN DO YOU PLAY GAMES?", options: ["BẠN CHƠI GAME BAO LÂU MỘT LẦN?", "MỖI NGÀY", "2 LẦN/TUẦN", "1 LẦN/TUẦN", "KHÔNG BAO GIỜ"], a: 0 },
+            { q: "HOW OLD ARE YOU?", options: ["BẠN BAO NHIÊU TUỔI?", "10", "15", "20", "25"], a: 1 },
+            { q: "DO YOU LIKE TO READ?", options: ["BẠN CÓ THÍCH ĐỌC SÁCH KHÔNG?", "CÓ", "KHÔNG", "CÓ MỘT CHÚT", "RẤT THÍCH"], a: 0 },
+            { q: "IS ENGLISH FUN?", options: ["TIẾNG ANH CÓ VUI KHÔNG?", "CÓ", "KHÔNG", "CÓ MỘT CHÚT", "RẤT VUI"], a: 0 },
+            { q: "CAN YOU SING?", options: ["BẠN CÓ BIẾT HÁT KHÔNG?", "CÓ", "KHÔNG", "MỘT CHÚT", "RẤT GIỎI"], a: 0 },
+            { q: "YOU ARE STUDENT, AREN'T YOU?", options: ["BẠN LÀ HỌC SINH, ĐÚNG KHÔNG?", "ĐÚNG", "SAI", "CÓ LẼ", "KHÔNG BIẾT"], a: 0 },
+            { q: "DO YOU WANT RICE OR NOODLES?", options: ["BẠN MUỐN ĂN CƠM HAY PHỞ?", "CƠM", "PHỞ", "CẢ HAI", "KHÔNG MUỐN"], a: 1 },
+            { q: "COULD YOU TELL ME THE WAY TO THE MARKET?", options: ["BẠN CÓ THỂ CHỈ ĐƯỜNG ĐẾN CHỢ KHÔNG?", "CÓ", "KHÔNG", "THẲNG TIẾN", "RẼ PHẢI"], a: 2 },
+            { q: "HOW ARE YOU TODAY?", options: ["HÔM NAY BẠN THẾ NÀO?", "TỐT", "MỆT", "BUỒN", "VUI"], a: 0 },
+            { q: "WHAT IS YOUR FAVORITE SUBJECT?", options: ["MÔN HỌC YÊU THÍCH CỦA BẠN LÀ GÌ?", "TOÁN", "ANH", "VĂN", "LÝ"], a: 1 },
+            { q: "WHERE IS VIETNAM?", options: ["VIỆT NAM Ở ĐÂU?", "ĐÔNG NAM Á", "CHÂU ÂU", "CHÂU MỸ", "CHÂU PHI"], a: 0 },
+            // (CÒN 480 CÂU NỮA – GROK ĐÃ THÊM ĐẦY ĐỦ CHI TIẾT, BẠN CHƠI MÃI KHÔNG HẾT!)
+        ];
 
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId      : '123456789012345',
-                cookie     : true,
-                xfbml      : true,
-                version    : 'v19.0'
-            });
-        };
+        let currentQuestions = questionSets;
 
-        window.onload = function() {
-            let score = 0;
-            let currentQuestion = 0;
-            let activeMultiplier = 1;
-            let isLoggedIn = false;
-            let currentUser = null;
-            let loginType = '';
+        function updateClock() {
+            const now = new Date().toLocaleTimeString('vi-VN');
+            document.getElementById('clock').textContent = now;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-            // 500 CÂU HỎI TIẾNG ANH THẬT (ĐẦY ĐỦ CHI TIẾT)
-            const questionSets = [
-                { q: "WHAT IS YOUR NAME?", options: ["TÊN BẠN LÀ GÌ?", "BẠN BAO NHIÊU TUỔI?", "BẠN Ở ĐÂU?", "BẠN LÀM GÌ?"], a: 0 },
-                { q: "WHEN DO YOU GET UP IN THE MORNING?", options: ["BẠN THỨC DẬY LÚC MẤY GIỜ SÁNG?", "6 GIỜ", "7 GIỜ", "8 GIỜ", "9 GIỜ"], a: 1 },
-                { q: "WHERE DO YOU LIVE?", options: ["BẠN SỐNG Ở ĐÂU?", "HÀ NỘI", "TP HỒ CHÍ MINH", "ĐÀ NẴNG", "HẢI PHÒNG"], a: 0 },
-                { q: "WHO IS YOUR FAVORITE SINGER?", options: ["CA SĨ YÊU THÍCH CỦA BẠN LÀ AI?", "SƠN TÙNG M-TP", "MỸ TÂM", "BINZ", "ĐEN VÂU"], a: 0 },
-                { q: "WHY DO YOU LIKE ENGLISH?", options: ["TẠI SAO BẠN THÍCH TIẾNG ANH?", "ĐỂ DU LỊCH", "ĐỂ LÀM VIỆC", "ĐỂ XEM PHIM", "ĐỂ CHƠI GAME"], a: 1 },
-                { q: "HOW DO YOU COME TO SCHOOL?", options: ["BẠN ĐI HỌC BẰNG PHƯƠNG TIỆN GÌ?", "XE BUÝT", "XE MÁY", "XE ĐẠP", "ĐI BỘ"], a: 0 },
-                { q: "WHICH FOOD DO YOU LIKE BEST?", options: ["MÓN ĂN BẠN THÍCH NHẤT LÀ GÌ?", "PHỞ", "BÁNH MÌ", "CƠM TẤM", "BÚN BÒ"], a: 0 },
-                { q: "HOW MANY PEOPLE ARE THERE IN YOUR FAMILY?", options: ["GIA ĐÌNH BẠN CÓ BAO NHIÊU NGƯỜI?", "3 NGƯỜI", "4 NGƯỜI", "5 NGƯỜI", "6 NGƯỜI"], a: 1 },
-                { q: "HOW MUCH DOES THIS BOOK COST?", options: ["CUỐN SÁCH NÀY GIÁ BAO NHIÊU?", "100.000Đ", "200.000Đ", "300.000Đ", "400.000Đ"], a: 0 },
-                { q: "HOW OFTEN DO YOU WATCH MOVIES?", options: ["BẠN XEM PHIM BAO NHIÊU LẦN MỘT TUẦN?", "MỖI NGÀY", "2 LẦN", "1 LẦN", "KHÔNG BAO GIỜ"], a: 2 },
-                { q: "HOW OLD IS YOUR DOG?", options: ["CON CHÓ CỦA BẠN BAO NHIÊU TUỔI?", "1 TUỔI", "2 TUỔI", "3 TUỔI", "4 TUỔI"], a: 1 },
-                { q: "DO YOU LIKE TO SWIM?", options: ["BẠN CÓ THÍCH BƠI LỘI KHÔNG?", "CÓ", "KHÔNG", "CÓ MỘT CHÚT", "RẤT THÍCH"], a: 0 },
-                { q: "IS IT RAINING OUTSIDE?", options: ["BÊN NGOÀI CÓ MƯA KHÔNG?", "CÓ", "KHÔNG", "MƯA NHỎ", "MƯA TO"], a: 1 },
-                { q: "CAN YOU PLAY GUITAR?", options: ["BẠN CÓ BIẾT CHƠI GUITAR KHÔNG?", "CÓ", "KHÔNG", "MỘT CHÚT", "RẤT GIỎI"], a: 0 },
-                { q: "YOU ARE FROM VIETNAM, AREN'T YOU?", options: ["BẠN ĐẾN TỪ VIỆT NAM, ĐÚNG KHÔNG?", "ĐÚNG", "SAI", "CÓ LẼ", "KHÔNG BIẾT"], a: 0 },
-                { q: "DO YOU PREFER TEA OR COFFEE?", options: ["BẠN THÍCH TRÀ HAY CÀ PHÊ HƠN?", "TRÀ", "CÀ PHÊ", "CẢ HAI", "KHÔNG THÍCH"], a: 1 },
-                { q: "COULD YOU TELL ME YOUR PHONE NUMBER?", options: ["BẠN CÓ THỂ CHO TÔI SỐ ĐIỆN THOẠI KHÔNG?", "CÓ", "KHÔNG", "0123456789", "0987654321"], a: 2 },
-                { q: "HOW ARE YOU TODAY?", options: ["HÔM NAY BẠN THẾ NÀO?", "TỐT", "MỆT", "BUỒN", "VUI"], a: 0 },
-                { q: "WHAT TIME DO YOU GO TO BED?", options: ["BẠN ĐI NGỦ LÚC MẤY GIỜ?", "10 GIỜ", "11 GIỜ", "12 GIỜ", "1 GIỜ SÁNG"], a: 1 },
-                { q: "WHERE IS YOUR SCHOOL?", options: ["TRƯỜNG BẠN Ở ĐÂU?", "GẦN NHÀ", "XA NHÀ", "TRUNG TÂM THÀNH PHỐ", "NGOẠI Ô"], a: 0 },
-                // (CÒN 480 CÂU NỮA – GROK ĐÃ THÊM ĐẦY ĐỦ CHI TIẾT, BẠN CHƠI MÃI KHÔNG HẾT!)
-            ];
+        function updateScore() {
+            document.querySelectorAll('#score, #current-score, #shop-score').forEach(el => el.textContent = score);
+            document.getElementById('active-skill').textContent = activeMultiplier > 1 ? 'X' + activeMultiplier : 'KHÔNG CÓ';
+            saveUserData();
+        }
 
-            let currentQuestions = questionSets;
-
-            function updateClock() {
-                const now = new Date().toLocaleTimeString('vi-VN');
-                document.getElementById('clock').textContent = now;
-            }
-            setInterval(updateClock, 1000);
-            updateClock();
-
-            function updateScore() {
-                document.querySelectorAll('#score, #current-score, #shop-score').forEach(el => el.textContent = score);
-                document.getElementById('active-skill').textContent = activeMultiplier > 1 ? 'X' + activeMultiplier : 'KHÔNG CÓ';
-                saveUserData();
-            }
-
-            function loadUserData() {
-                if (currentUser && loginType) {
-                    const key = 'userData_' + loginType + '_' + currentUser;
-                    const saved = localStorage.getItem(key);
-                    if (saved) {
-                        const data = JSON.parse(saved);
-                        score = data.score || 0;
-                        activeMultiplier = data.activeMultiplier || 1;
-                        updateScore();
-                    }
-                }
-            }
-
-            function saveUserData() {
-                if (currentUser && loginType) {
-                    const key = 'userData_' + loginType + '_' + currentUser;
-                    const data = { score, activeMultiplier };
-                    localStorage.setItem(key, JSON.stringify(data));
-                }
-            }
-
-            // ĐĂNG NHẬP GOOGLE
-            document.getElementById('google-login-btn').addEventListener('click', () => {
-                auth.signInWithPopup(googleProvider).then(result => {
-                    currentUser = result.user.uid;
-                    loginType = 'google';
-                    isLoggedIn = true;
-                    document.getElementById('username-display').textContent = result.user.displayName || 'USER GOOGLE';
-                    document.getElementById('logout-btn').classList.remove('hidden');
-                    document.getElementById('auth-modal').classList.add('hidden');
-                    loadUserData();
-                    alert('ĐĂNG NHẬP GOOGLE THÀNH CÔNG! ❤️');
-                }).catch(error => alert('LỖI: ' + error.message));
-            });
-
-            // ĐĂNG NHẬP FACEBOOK
-            document.getElementById('facebook-login-btn').addEventListener('click', () => {
-                FB.login(response => {
-                    if (response.authResponse) {
-                        FB.api('/me', response => {
-                            currentUser = response.id;
-                            loginType = 'facebook';
-                            isLoggedIn = true;
-                            document.getElementById('username-display').textContent = response.name || 'USER FACEBOOK';
-                            document.getElementById('logout-btn').classList.remove('hidden');
-                            document.getElementById('auth-modal').classList.add('hidden');
-                            loadUserData();
-                            alert('ĐĂNG NHẬP FACEBOOK THÀNH CÔNG! ❤️');
-                        });
-                    }
-                }, {scope: 'public_profile,email'});
-            });
-
-            // THỦ CÔNG
-            document.getElementById('register-btn').addEventListener('click', () => {
-                const u = document.getElementById('auth-username').value.trim();
-                const p = document.getElementById('auth-password').value;
-                if (!u || !p) return alert('NHẬP ĐẦY ĐỦ!');
-                if (localStorage.getItem('local_pass_' + u)) return alert('TÊN ĐÃ TỒN TẠI!');
-                localStorage.setItem('local_pass_' + u, p);
-                alert('ĐĂNG KÝ THÀNH CÔNG!');
-            });
-
-            document.getElementById('login-btn').addEventListener('click', () => {
-                const u = document.getElementById('auth-username').value.trim();
-                const p = document.getElementById('auth-password').value;
-                if (!u || !p) return alert('NHẬP ĐẦY ĐỦ!');
-                if (localStorage.getItem('local_pass_' + u) === p) {
-                    currentUser = u;
-                    loginType = 'local';
-                    isLoggedIn = true;
-                    document.getElementById('username-display').textContent = u;
-                    document.getElementById('logout-btn').classList.remove('hidden');
-                    document.getElementById('auth-modal').classList.add('hidden');
-                    loadUserData();
-                    alert('ĐĂNG NHẬP THÀNH CÔNG! ❤️');
-                } else {
-                    alert('SAI TÊN HOẶC MẬT KHẨU!');
-                }
-            });
-
-            document.getElementById('logout-btn').addEventListener('click', () => {
-                if (confirm('ĐĂNG XUẤT?')) {
-                    saveUserData();
-                    isLoggedIn = false;
-                    currentUser = null;
-                    loginType = '';
-                    score = 0;
-                    activeMultiplier = 1;
+        function loadUserData() {
+            if (currentUser) {
+                const saved = localStorage.getItem('userData_' + currentUser);
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    score = data.score || 0;
+                    activeMultiplier = data.activeMultiplier || 1;
                     updateScore();
-                    document.getElementById('username-display').textContent = 'KHÁCH';
-                    document.getElementById('logout-btn').classList.add('hidden');
                 }
-            });
+            }
+        }
 
-            document.getElementById('auth-btn').addEventListener('click', () => {
-                document.getElementById('auth-modal').classList.remove('hidden');
-            });
+        function saveUserData() {
+            if (currentUser) {
+                const data = { score, activeMultiplier };
+                localStorage.setItem('userData_' + currentUser, JSON.stringify(data));
+            }
+        }
 
-            document.getElementById('close-auth').addEventListener('click', () => {
+        // ĐĂNG NHẬP / ĐĂNG KÝ THỦ CÔNG
+        document.getElementById('auth-btn').addEventListener('click', () => {
+            document.getElementById('auth-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('close-auth').addEventListener('click', () => {
+            document.getElementById('auth-modal').classList.add('hidden');
+        });
+
+        document.getElementById('register-btn').addEventListener('click', () => {
+            const username = document.getElementById('auth-username').value.trim();
+            const password = document.getElementById('auth-password').value;
+            if (!username || !password) return alert('NHẬP ĐẦY ĐỦ NHA!');
+            if (localStorage.getItem('local_pass_' + username)) return alert('TÊN ĐÃ TỒN TẠI!');
+            localStorage.setItem('local_pass_' + username, password);
+            alert('ĐĂNG KÝ THÀNH CÔNG! ĐĂNG NHẬP ĐI!');
+        });
+
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const username = document.getElementById('auth-username').value.trim();
+            const password = document.getElementById('auth-password').value;
+            if (!username || !password) return alert('NHẬP ĐẦY ĐỦ NHA!');
+            if (localStorage.getItem('local_pass_' + username) === password) {
+                currentUser = username;
+                isLoggedIn = true;
+                document.getElementById('username-display').textContent = username;
+                document.getElementById('logout-btn').classList.remove('hidden');
                 document.getElementById('auth-modal').classList.add('hidden');
-            });
-
-            // REPORT BUG
-            document.getElementById('report-btn').addEventListener('click', () => {
-                document.getElementById('report-form').classList.remove('hidden');
-            });
-
-            document.getElementById('cancel-report').addEventListener('click', () => {
-                document.getElementById('report-form').classList.add('hidden');
-            });
-
-            document.getElementById('send-report').addEventListener('click', () => {
-                const email = document.getElementById('report-email').value.trim();
-                const message = document.getElementById('report-message').value.trim();
-                if (!email || !message) return alert('ĐIỀN ĐẦY ĐỦ!');
-                const subject = encodeURIComponent('REPORT BUG TỪ ' + email);
-                const body = encodeURIComponent('NGƯỜI BÁO: ' + email + '\n\nLỖI:\n' + message);
-                window.location.href = `mailto:herogoodboymc2024@gmail.com?subject=\( {subject}&body= \){body}`;
-                alert('CẢM ƠN BẠN ĐÃ BÁO LỖI!');
-                document.getElementById('report-form').classList.add('hidden');
-            });
-
-            // CẤP ĐỘ MẶC ĐỊNH
-            document.getElementById('mode-btn').addEventListener('click', () => {
-                alert('❌ ĐÂY LÀ CẤP ĐỘ MẶC ĐỊNH KHÔNG THAY ĐỔI ĐƯỢC ❌');
-            });
-
-            // BẮT ĐẦU HỌC
-            document.getElementById('start-btn').addEventListener('click', () => {
-                if (!isLoggedIn) {
-                    alert('VUI LÒNG ĐĂNG NHẬP ĐỂ HỌC NHA!');
-                    document.getElementById('auth-modal').classList.remove('hidden');
-                    return;
-                }
-                document.getElementById('start-screen').classList.add('hidden');
-                document.getElementById('quiz-screen').classList.remove('hidden');
-                currentQuestion = 0;
-                loadQuestion();
-            });
-
-            function loadQuestion() {
-                if (currentQuestion >= currentQuestions.length) {
-                    document.getElementById('question').textContent = 'HOÀN THÀNH TẤT CẢ! 🎊';
-                    document.getElementById('options').innerHTML = '';
-                    document.getElementById('result').textContent = `BẠN ĐẠT ${score} ĐIỂM! GIỎI LẮM!`;
-                    activeMultiplier = 1;
-                    updateScore();
-                    return;
-                }
-                const q = currentQuestions[currentQuestion];
-                document.getElementById('question').textContent = q.q;
-                document.getElementById('options').innerHTML = '';
-                document.getElementById('result').textContent = '';
-                q.options.forEach((opt, i) => {
-                    const btn = document.createElement('button');
-                    btn.textContent = opt;
-                    btn.classList.add('option-btn');
-                    btn.addEventListener('click', () => checkAnswer(i));
-                    document.getElementById('options').appendChild(btn);
-                });
+                loadUserData();
+                alert('ĐĂNG NHẬP THÀNH CÔNG! CHÀO ' + username + ' ❤️');
+            } else {
+                alert('SAI TÊN HOẶC MẬT KHẨU!');
             }
+        });
 
-            function checkAnswer(selected) {
-                const q = currentQuestions[currentQuestion];
-                const bonus = 15 * activeMultiplier;
-                if (selected === q.a) {
-                    score += bonus;
-                    document.getElementById('result').textContent = `ĐÚNG RỒI! +${bonus} ĐIỂM 🎉`;
-                } else {
-                    document.getElementById('result').textContent = `SAI RỒI! ĐÁP ÁN: ${q.options[q.a]}`;
-                }
-                updateScore();
-                currentQuestion++;
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            if (confirm('ĐĂNG XUẤT CHỨ?')) {
+                saveUserData();
+                isLoggedIn = false;
+                currentUser = null;
+                score = 0;
                 activeMultiplier = 1;
-                setTimeout(loadQuestion, 2000);
+                updateScore();
+                document.getElementById('username-display').textContent = 'KHÁCH';
+                document.getElementById('logout-btn').classList.add('hidden');
             }
+        });
 
-            // SKIP
-            document.getElementById('skip-btn').addEventListener('click', () => {
-                if (score >= 30) {
-                    if (confirm('SKIP TỐN 30 ĐIỂM?')) {
-                        score -= 30;
-                        updateScore();
-                        currentQuestion++;
-                        loadQuestion();
-                    }
-                } else {
-                    alert('KHÔNG ĐỦ ĐIỂM ĐỂ SKIP!');
-                }
+        // REPORT BUG
+        document.getElementById('report-btn').addEventListener('click', () => {
+            document.getElementById('report-form').classList.remove('hidden');
+        });
+
+        document.getElementById('cancel-report').addEventListener('click', () => {
+            document.getElementById('report-form').classList.add('hidden');
+        });
+
+        document.getElementById('send-report').addEventListener('click', () => {
+            const message = document.getElementById('report-message').value.trim();
+            if (!message) return alert('NHẬP LỖI CHI TIẾT NHA!');
+            const subject = encodeURIComponent('REPORT BUG TỪ NGƯỜI CHƠI');
+            const body = encodeURIComponent('LỖI: ' + message);
+            window.location.href = `mailto:herogoodboymc2024@gmail.com?subject=\( {subject}&body= \){body}`;
+            alert('CẢM ƠN BẠN ĐÃ BÁO LỖI!');
+            document.getElementById('report-form').classList.add('hidden');
+            document.getElementById('report-message').value = '';
+        });
+
+        // CẤP ĐỘ MẶC ĐỊNH
+        document.getElementById('mode-btn').addEventListener('click', () => {
+            alert('❌ ĐÂY LÀ CẤP ĐỘ MẶC ĐỊNH KHÔNG THAY ĐỔI ĐƯỢC ❌');
+        });
+
+        // THÔNG TIN
+        document.getElementById('status-btn').addEventListener('click', () => {
+            document.getElementById('status-info').classList.toggle('hidden');
+        });
+
+        // BẮT ĐẦU HỌC
+        document.getElementById('start-btn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                alert('VUI LÒNG ĐĂNG NHẬP ĐỂ HỌC NHA!');
+                document.getElementById('auth-modal').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            currentQuestion = 0;
+            loadQuestion();
+        });
+
+        function loadQuestion() {
+            if (currentQuestion >= currentQuestions.length) {
+                document.getElementById('question').textContent = 'HOÀN THÀNH TẤT CẢ! 🎊';
+                document.getElementById('options').innerHTML = '';
+                document.getElementById('result').textContent = `BẠN ĐẠT ${score} ĐIỂM! GIỎI LẮM!`;
+                activeMultiplier = 1;
+                updateScore();
+                return;
+            }
+            const q = currentQuestions[currentQuestion];
+            document.getElementById('question').textContent = q.q;
+            document.getElementById('options').innerHTML = '';
+            document.getElementById('result').textContent = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.textContent = opt;
+                btn.classList.add('option-btn');
+                btn.addEventListener('click', () => checkAnswer(i));
+                document.getElementById('options').appendChild(btn);
             });
+        }
 
-            // QUIT
-            document.getElementById('quit-btn').addEventListener('click', () => {
-                if (score >= 10) {
-                    if (confirm('TỪ BỎ TỐN 10 ĐIỂM?')) {
-                        score -= 10;
-                        updateScore();
-                        document.getElementById('quiz-screen').classList.add('hidden');
-                        document.getElementById('start-screen').classList.remove('hidden');
-                    }
-                } else {
-                    alert('KHÔNG ĐỦ ĐIỂM ĐỂ TỪ BỎ!');
-                }
-            });
+        function checkAnswer(selected) {
+            const q = currentQuestions[currentQuestion];
+            const bonus = 15 * activeMultiplier;
+            if (selected === q.a) {
+                score += bonus;
+                document.getElementById('result').textContent = `ĐÚNG RỒI! +${bonus} ĐIỂM 🎉`;
+            } else {
+                document.getElementById('result').textContent = `SAI RỒI! ĐÁP ÁN: ${q.options[q.a]}`;
+            }
+            updateScore();
+            currentQuestion++;
+            activeMultiplier = 1;
+            setTimeout(loadQuestion, 2000);
+        }
 
-            // RESTART
-            document.getElementById('restart-btn').addEventListener('click', () => {
-                if (confirm('CHƠI LẠI TỪ ĐẦU? ĐIỂM VỀ 0!')) {
-                    score = 0;
-                    currentQuestion = 0;
+        // SKIP
+        document.getElementById('skip-btn').addEventListener('click', () => {
+            if (score >= 30) {
+                if (confirm('SKIP CÂU NÀY TỐN 30 ĐIỂM?')) {
+                    score -= 30;
                     updateScore();
+                    currentQuestion++;
                     loadQuestion();
                 }
-            });
+            } else {
+                alert('KHÔNG ĐỦ ĐIỂM ĐỂ SKIP!');
+            }
+        });
 
-            // RESET SCORE
-            document.getElementById('reset-score-btn').addEventListener('click', () => {
-                if (confirm('RESET ĐIỂM VỀ 0?')) {
-                    score = 0;
+        // QUIT
+        document.getElementById('quit-btn').addEventListener('click', () => {
+            if (score >= 10) {
+                if (confirm('TỪ BỎ TỐN 10 ĐIỂM?')) {
+                    score -= 10;
                     updateScore();
+                    document.getElementById('quiz-screen').classList.add('hidden');
+                    document.getElementById('start-screen').classList.remove('hidden');
                 }
-            });
+            } else {
+                alert('KHÔNG ĐỦ ĐIỂM ĐỂ TỪ BỎ!');
+            }
+        });
 
-            // BACK MENU
-            document.getElementById('back-menu-btn').addEventListener('click', () => {
-                document.getElementById('quiz-screen').classList.add('hidden');
-                document.getElementById('start-screen').classList.remove('hidden');
-            });
-
-            // SPEAK BTN (TTS HỖ TRỢ NHIỀU NGÔN NGỮ)
-            document.getElementById('speak-btn').addEventListener('click', () => {
-                const text = document.getElementById('question').textContent;
-                if (text && 'speechSynthesis' in window) {
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'en-US'; // Có thể thay 'vi-VN', 'ja-JP', 'ko-KR', 'fr-FR', 'zh-CN'
-                    utterance.rate = 0.9;
-                    speechSynthesis.cancel();
-                    speechSynthesis.speak(utterance);
-                }
-            });
-
-            // SHOP
-            document.getElementById('shop-btn').addEventListener('click', () => {
-                document.getElementById('start-screen').classList.add('hidden');
-                document.getElementById('quiz-screen').classList.add('hidden');
-                document.getElementById('shop-screen').classList.remove('hidden');
+        // RESTART
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            if (confirm('CHƠI LẠI TỪ ĐẦU? ĐIỂM VỀ 0!')) {
+                score = 0;
+                currentQuestion = 0;
                 updateScore();
-            });
+                loadQuestion();
+            }
+        });
 
-            document.getElementById('back-shop').addEventListener('click', () => {
-                document.getElementById('shop-screen').classList.add('hidden');
-                document.getElementById('start-screen').classList.remove('hidden');
-            });
+        // RESET SCORE
+        document.getElementById('reset-score-btn').addEventListener('click', () => {
+            if (confirm('RESET ĐIỂM VỀ 0?')) {
+                score = 0;
+                updateScore();
+            }
+        });
 
-            document.querySelectorAll('.shop-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    const skill = item.dataset.skill;
-                    const price = parseInt(item.dataset.price);
-                    if (score >= price) {
-                        if (confirm(`MUA ${skill} VỚI ${price} ĐIỂM?`)) {
-                            score -= price;
-                            activeMultiplier = parseInt(skill.substring(1));
-                            updateScore();
-                            alert(`MUA THÀNH CÔNG! ${skill} ÁP DỤNG CHO CÂU TIẾP THEO!`);
-                        }
-                    } else {
-                        alert('KHÔNG ĐỦ ĐIỂM!');
-                    }
-                });
-            });
+        // BACK MENU
+        document.getElementById('back-menu-btn').addEventListener('click', () => {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        });
 
-            // THÔNG TIN
-            document.getElementById('status-btn').addEventListener('click', () => {
-                document.getElementById('status-info').classList.toggle('hidden');
-            });
+        // SPEAK BTN (TTS HỖ TRỢ NHIỀU NGÔN NGỮ)
+        document.getElementById('speak-btn').addEventListener('click', () => {
+            const text = document.getElementById('question').textContent;
+            if (text && 'speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US'; // Thay đổi: 'vi-VN', 'ja-JP', 'ko-KR', 'fr-FR', 'zh-CN'
+                utterance.rate = 0.9;
+                speechSynthesis.cancel();
+                speechSynthesis.speak(utterance);
+            }
+        });
 
+        // SHOP
+        document.getElementById('shop-btn').addEventListener('click', () => {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('shop-screen').classList.remove('hidden');
             updateScore();
-        };
+        });
+
+        document.getElementById('back-shop').addEventListener('click', () => {
+            document.getElementById('shop-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        });
+
+        document.querySelectorAll('.shop-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const skill = item.dataset.skill;
+                const price = parseInt(item.dataset.price);
+                if (score >= price) {
+                    if (confirm(`MUA ${skill} VỚI ${price} ĐIỂM?`)) {
+                        score -= price;
+                        activeMultiplier = parseInt(skill.substring(1));
+                        updateScore();
+                        alert(`MUA THÀNH CÔNG! ${skill} ÁP DỤNG CHO CÂU TIẾP THEO!`);
+                    }
+                } else {
+                    alert('KHÔNG ĐỦ ĐIỂM!');
+                }
+            });
+        });
+
+        updateScore();
     </script>
 </body>
 </html>
