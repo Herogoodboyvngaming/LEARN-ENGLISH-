@@ -1,8 +1,10 @@
+/* style.css - Update mới cho giao diện đẹp, thoáng, mượt trên mobile & PC */
+
 body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #e0f7fa, #c7f9e8);
     margin: 0;
-    padding: 20px 0;
+    padding: 0;
     min-height: 100vh;
     color: #0f172a;
 }
@@ -10,7 +12,7 @@ body {
 .container {
     width: 100%;
     max-width: 480px;
-    margin: 0 auto;
+    margin: 15px auto;
     background: rgba(255, 255, 255, 0.85);
     border-radius: 40px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
@@ -21,19 +23,39 @@ header {
     background: linear-gradient(90deg, #0ea5e9, #22d3ee);
     color: white;
     text-align: center;
-    padding: 40px 20px;
+    padding: 50px 20px 40px; /* Tăng padding trên dưới */
 }
 
 header h1 {
-    margin: 0;
-    font-size: 32px;
+    margin: 0 0 15px;
+    font-size: 38px; /* Tăng kích thước tiêu đề */
     font-weight: 700;
+    line-height: 1.2;
+}
+
+.clock, .user-info, .subtitle {
+    font-size: 20px;
+    margin: 12px 0;
+}
+
+.user-info {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px;
+    padding: 35px 20px;
+    background: rgba(255, 255, 255, 0.6);
 }
 
 #question {
-    font-size: 32px;
+    font-size: 38px; /* Tăng to hơn, dễ đọc */
     text-align: center;
-    margin: 70px 40px 50px;
+    margin: 80px 40px 60px; /* Tăng khoảng cách trên dưới */
     color: #0f172a;
     font-weight: 700;
     line-height: 1.5;
@@ -41,14 +63,15 @@ header h1 {
 
 .speak-controls {
     text-align: center;
-    margin: 0 0 50px;
+    margin: 30px 0 70px; /* Tăng khoảng cách dưới để thoáng */
 }
 
 .speak-controls button {
-    margin: 0 15px;
-    padding: 16px 35px;
-    font-size: 20px;
+    margin: 15px 20px; /* Tăng khoảng cách giữa 2 nút */
+    padding: 18px 40px;
+    font-size: 22px;
     border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 #change-voice-btn {
@@ -58,18 +81,18 @@ header h1 {
 #options {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    padding: 0 50px;
+    gap: 35px; /* Tăng khoảng cách giữa các đáp án */
+    padding: 0 50px 60px;
 }
 
 .option-btn {
-    padding: 35px;
-    font-size: 26px;
+    padding: 40px;
+    font-size: 28px;
     background: white;
     color: #0f172a;
     border-radius: 35px;
     border: none;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
     transition: all 0.4s ease;
     font-weight: 600;
     text-align: center;
@@ -77,55 +100,55 @@ header h1 {
 
 .option-btn:hover {
     transform: translateY(-10px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
 }
 
 .quiz-controls {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    padding: 50px 40px;
+    gap: 30px;
+    padding: 60px 40px 80px; /* Tăng khoảng cách dưới */
 }
 
 .quiz-controls button {
     background: linear-gradient(45deg, #fb923c, #f97316);
-    padding: 18px;
-    font-size: 19px;
+    padding: 20px;
+    font-size: 20px;
     border-radius: 50px;
 }
 
 #result {
-    font-size: 32px;
+    font-size: 34px;
     text-align: center;
-    margin: 50px 40px;
+    margin: 60px 40px;
     font-weight: bold;
-    min-height: 60px;
+    min-height: 70px;
 }
 
 #score {
-    font-size: 40px;
+    font-size: 42px;
     text-align: center;
     color: #16a34a;
     font-weight: bold;
-    margin: 30px 0;
+    margin: 40px 0;
 }
 
 .modal-content {
     background: white;
-    padding: 50px;
+    padding: 60px 40px;
     border-radius: 40px;
     text-align: center;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.3);
 }
 
 #voice-select {
     width: 100%;
-    padding: 20px;
-    margin: 30px 0;
-    border-radius: 20px;
+    padding: 25px;
+    margin: 40px 0;
+    border-radius: 25px;
     background: #f0fdfa;
     border: 1px solid #86efac;
-    font-size: 20px;
+    font-size: 22px;
 }
 
 .hidden {
@@ -137,13 +160,16 @@ header h1 {
         margin: 10px;
         border-radius: 30px;
     }
+    header h1 {
+        font-size: 32px;
+    }
     #question {
-        font-size: 28px;
-        margin: 50px 30px 40px;
+        font-size: 30px;
+        margin: 60px 30px 50px;
     }
     .option-btn {
-        font-size: 24px;
-        padding: 30px;
+        font-size: 26px;
+        padding: 35px;
     }
     .quiz-controls {
         grid-template-columns: 1fr;
@@ -151,6 +177,6 @@ header h1 {
     .speak-controls button {
         display: block;
         width: 85%;
-        margin: 15px auto;
+        margin: 20px auto;
     }
 }
